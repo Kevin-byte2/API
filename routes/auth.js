@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { db } from '../database/db.js';
+import { db } from '../database/firebase.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        const user = db.findUser(username);
+        const user = await db.findUser(username);
         if (!user) {
             return res.status(401).json({ error: "Invalid username or password credentials." });
         }

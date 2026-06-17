@@ -1,21 +1,21 @@
 import express from 'express';
-import { db } from '../database/db.js';
+import { db } from '../database/firebase.js';
 import { authenticateToken, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Retrieve all product acquisition recommendations (Requires admin)
-router.get('/', authenticateToken, requireRole(['admin']), (req, res) => {
+router.get('/', authenticateToken, requireRole(['admin']), async (req, res) => {
     try {
-        const recommendations = db.getRecommendations();
+        const recommendations = await db.getRecommendations();
         res.json({ recommendations });
     } catch (err) {
         res.status(500).json({ error: "Failed to fetch recommendations: " + err.message });
     }
 });
 
-// Create new product acquisition recommendation (Cashiers and Admins can log this)
-router.post('/', authenticateToken, (req, res) => {
+// Create new product acquisition recommendation (Developers, SMEs, and Admins can log this)
+router.post('/', authenticateToken, async (req, res) => {
     const { barcode, suggestedName, businessType, size, capacity, variations } = req.body;
 
     if (!barcode) {
@@ -24,21 +24,22 @@ router.post('/', authenticateToken, (req, res) => {
 
     try {
         // Check if barcode is already a registered product
-        const existing = db.getProductByBarcode(barcode);
+        const existing = await db.getProductByBarcode(barcode);
         if (existing) {
             return res.status(400).json({ error: "Product already registered in database.", product: existing });
         }
 
-        // Check if recommendation for this barcode already exists and is pending
-        const existingReco = db.getRecommendations().find(r => r.barcode === barcode && r.status === 'pending');
+        // Check if a pending recommendation for this barcode already exists
+        const allRecos = await db.getRecommendations();
+        const existingReco = allRecos.find(r => r.barcode === barcode && r.status === 'pending');
         if (existingReco) {
-            return res.json({ 
-                message: "A pending acquisition recommendation already exists for this barcode.", 
-                recommendation: existingReco 
+            return res.json({
+                message: "A pending acquisition recommendation already exists for this barcode.",
+                recommendation: existingReco
             });
         }
 
-        const newReco = db.addRecommendation({
+        const newReco = await db.addRecommendation({
             barcode,
             suggestedName: suggestedName || `New Scanned Item (${barcode})`,
             businessType: businessType || "general",
@@ -57,8 +58,8 @@ router.post('/', authenticateToken, (req, res) => {
     }
 });
 
-// Admin approves a recommendation, which promotes it to the active product inventory
-router.post('/:id/approve', authenticateToken, requireRole(['admin']), (req, res) => {
+// Admin approves a recommendation — promotes it to active product inventory
+router.post('/:id/approve', authenticateToken, requireRole(['admin']), async (req, res) => {
     const { id } = req.params;
     const { price, stock, category, name } = req.body;
 
@@ -67,39 +68,38 @@ router.post('/:id/approve', authenticateToken, requireRole(['admin']), (req, res
     }
 
     try {
-        const recommendations = db.getRecommendations();
-        const recoIdx = recommendations.findIndex(r => r.id === id);
+        const reco = await db.getRecommendations().then(list => list.find(r => r.id === id));
 
-        if (recoIdx === -1) {
+        if (!reco) {
             return res.status(404).json({ error: "Recommendation not found." });
         }
-
-        const reco = recommendations[recoIdx];
         if (reco.status !== 'pending') {
             return res.status(400).json({ error: `Recommendation already ${reco.status}.` });
         }
 
-        // Add to active products database
-        const newProduct = db.addProduct({
+        // Add to active products (firebase.js handles duplicate prevention)
+        const newProduct = await db.addProduct({
             barcode: reco.barcode,
             name: name || reco.suggestedName,
+            description: "",
             category: category || "General",
             businessType: reco.businessType,
             price: parseFloat(price),
             stock: parseInt(stock),
-            image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=300&auto=format&fit=crop", // placeholder image
+            image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=300&auto=format&fit=crop",
             size: reco.size,
             capacity: reco.capacity,
             variations: reco.variations
         });
 
         // Mark recommendation as approved
-        recommendations[recoIdx].status = 'approved';
-        recommendations[recoIdx].resolvedProduct = newProduct.id;
-        db.save();
+        await db.updateRecommendation(id, {
+            status: 'approved',
+            resolvedProductId: newProduct.id
+        });
 
         res.json({
-            message: "Recommendation approved. Product successfully registered in inventory.",
+            message: "Recommendation approved. Product successfully registered in Firestore inventory.",
             product: newProduct
         });
     } catch (err) {
@@ -108,22 +108,14 @@ router.post('/:id/approve', authenticateToken, requireRole(['admin']), (req, res
 });
 
 // Admin rejects/ignores a recommendation
-router.post('/:id/ignore', authenticateToken, requireRole(['admin']), (req, res) => {
+router.post('/:id/ignore', authenticateToken, requireRole(['admin']), async (req, res) => {
     const { id } = req.params;
     try {
-        const recommendations = db.getRecommendations();
-        const recoIdx = recommendations.findIndex(r => r.id === id);
-
-        if (recoIdx === -1) {
+        const updated = await db.updateRecommendation(id, { status: 'ignored' });
+        if (!updated) {
             return res.status(404).json({ error: "Recommendation not found." });
         }
-
-        recommendations[recoIdx].status = 'ignored';
-        db.save();
-
-        res.json({
-            message: "Recommendation ignored successfully."
-        });
+        res.json({ message: "Recommendation ignored successfully." });
     } catch (err) {
         res.status(500).json({ error: "Failed to ignore recommendation: " + err.message });
     }

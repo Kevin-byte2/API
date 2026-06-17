@@ -11,7 +11,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Import routers
 import authRouter from './routes/auth.js';
 import productsRouter from './routes/products.js';
-import salesRouter from './routes/sales.js';
 import recommendationsRouter from './routes/recommendations.js';
 import daasRouter from './routes/daas.js';
 
@@ -72,7 +71,6 @@ app.use((req, res, next) => {
 // --- API Routing Hookup ---
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
-app.use('/api/sales', salesRouter);
 app.use('/api/recommendations', recommendationsRouter);
 
 // DaaS Integration Layer (Guarded internally by API Key)
@@ -93,10 +91,8 @@ app.get('/api', (req, res) => {
         endpoints: {
             auth: "/api/auth/login",
             products: "/api/products",
-            sales: "/api/sales",
             recommendations: "/api/recommendations",
-            daas_catalog: "/daas/catalog (x-api-key required)",
-            daas_sales: "/daas/sales-feed (x-api-key required)"
+            daas_catalog: "/daas/catalog (x-api-key required)"
         }
     });
 });

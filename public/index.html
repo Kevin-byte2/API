@@ -1,414 +1,1260 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InventaAPI — Product Data API for Philippine SMEs</title>
+  <meta name="description"
+    content="InventaAPI is a Data-as-a-Service API platform that gives Philippine SMEs and developers instant access to a centralized product catalog — names, barcodes, prices, images, and more." />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet" />
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#04060f;--bg2:#080d1a;--bg3:#0e1525;
-      --card:#0d1117;--card2:#111827;
-      --border:rgba(99,102,241,.18);--borderl:rgba(255,255,255,.06);
-      --accent:#6366f1;--accent2:#818cf8;--a3:#06b6d4;--a4:#8b5cf6;
-      --green:#10b981;--yellow:#f59e0b;--red:#ef4444;--pink:#ec4899;
-      --text:#f1f5f9;--ts:#94a3b8;--tm:#475569;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    html{scroll-behavior:smooth}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
 
-    /* BG effects */
-    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(99,102,241,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
-    .blob{position:fixed;border-radius:50%;filter:blur(120px);opacity:.1;pointer-events:none;z-index:0}
-    .b1{width:700px;height:700px;background:#6366f1;top:-250px;left:-250px}
-    .b2{width:500px;height:500px;background:#06b6d4;bottom:-150px;right:-150px;opacity:.07}
-    .b3{width:400px;height:400px;background:#8b5cf6;top:40%;left:55%;transform:translate(-50%,-50%)}
+    :root {
+      --bg: #050810;
+      --bg2: #080d1c;
+      --card: #0c1120;
+      --card2: #101827;
+      --border: rgba(99, 102, 241, .22);
+      --borderl: rgba(255, 255, 255, .07);
+      --accent: #6366f1;
+      --accent2: #818cf8;
+      --cyan: #06b6d4;
+      --purple: #8b5cf6;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --ts: #94a3b8;
+      --tm: #4b5563;
+    }
 
-    .wrap{max-width:1140px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99, 102, 241, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, .025) 1px, transparent 1px);
+      background-size: 52px 52px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(130px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .b1 {
+      width: 600px;
+      height: 600px;
+      background: #6366f1;
+      top: -200px;
+      left: -200px;
+      opacity: .07;
+    }
+
+    .b2 {
+      width: 500px;
+      height: 500px;
+      background: #06b6d4;
+      bottom: -100px;
+      right: -100px;
+      opacity: .05;
+    }
+
+    .b3 {
+      width: 350px;
+      height: 350px;
+      background: #8b5cf6;
+      top: 45%;
+      left: 60%;
+      transform: translate(-50%, -50%);
+      opacity: .06;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
 
     /* ── NAV ── */
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;border-bottom:1px solid var(--borderl);background:rgba(4,6,15,.85);backdrop-filter:blur(20px)}
-    .nav-inner{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:80px}
-    .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--borderl);
+      background: rgba(5, 8, 16, .88);
+      backdrop-filter: blur(20px);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 66px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
     .brand-logo {
-      width: 120px;
-      height: auto;
+      height: 36px;
+      width: auto;
       display: block;
       object-fit: contain;
     }
-    .logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--a4));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;color:#fff}
-    .logo-text{font-size:1.1rem;font-weight:800;color:var(--text);letter-spacing:-.03em}
-    .logo-text span{color:var(--accent2)}
-    .nav-links{display:flex;align-items:center;gap:28px}
-    .nav-links a{color:var(--ts);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s}
-    .nav-links a:hover{color:var(--text)}
-    .nav-cta{display:flex;align-items:center;gap:10px}
-    .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-size:.85rem;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;text-decoration:none;transition:all .2s}
-    .btn-ghost{background:transparent;color:var(--ts);border:1px solid var(--borderl)}
-    .btn-ghost:hover{color:var(--text);border-color:var(--border)}
-    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--a4));color:#fff;box-shadow:0 4px 20px rgba(99,102,241,.3)}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,.45)}
-    .btn-lg{padding:14px 32px;font-size:.95rem;border-radius:12px}
-    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
-    .btn-outline:hover{background:rgba(99,102,241,.08)}
 
-    /* ── HERO ── */
-    .hero{padding:175px 0 100px;text-align:center}
-    .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 18px;border-radius:100px;border:1px solid rgba(99,102,241,.3);background:rgba(99,102,241,.07);font-size:.72rem;font-weight:700;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:32px}
-    .hero-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
-    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-    .hero h1{font-size:clamp(2.4rem,5.5vw,4rem);font-weight:900;letter-spacing:-.05em;line-height:1.08;margin-bottom:20px}
-    .hero h1 .grad{background:linear-gradient(135deg,#f1f5f9 0%,#94a3b8 50%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .hero h1 .grad2{background:linear-gradient(135deg,var(--accent),var(--a3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .hero-sub{font-size:1.1rem;color:var(--ts);max-width:580px;margin:0 auto 40px;line-height:1.75}
-    .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
-    .hero-social-proof{display:flex;align-items:center;justify-content:center;gap:24px;color:var(--tm);font-size:.8rem;flex-wrap:wrap}
-    .proof-item{display:flex;align-items:center;gap:6px}
-    .proof-item svg{opacity:.6}
-
-    /* Code preview */
-    .code-preview{max-width:700px;margin:70px auto 0;text-align:left}
-    .code-tabs{display:flex;gap:4px;margin-bottom:0;background:var(--card2);padding:8px 8px 0;border-radius:12px 12px 0 0;border:1px solid var(--border);border-bottom:none}
-    .code-tab{padding:7px 16px;border-radius:7px 7px 0 0;font-size:.75rem;font-weight:600;cursor:pointer;color:var(--tm);transition:all .2s}
-    .code-tab.active{background:var(--card);color:var(--text)}
-    .code-pane{display:none;background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:24px;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.75;overflow-x:auto}
-    .code-pane.active{display:block}
-    .c-cm{color:#475569}.c-kw{color:#c084fc}.c-st{color:#86efac}.c-nm{color:#fda4af}.c-ky{color:#93c5fd}.c-url{color:#67e8f9}.c-ok{color:#10b981}
-
-    /* ── HOW IT WORKS ── */
-    .section{padding:90px 0}
-    .section-label{font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
-    .section-title{font-size:clamp(1.7rem,3vw,2.4rem);font-weight:900;letter-spacing:-.04em;line-height:1.15;margin-bottom:14px}
-    .section-sub{color:var(--ts);font-size:.95rem;max-width:520px;line-height:1.7}
-    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;margin-top:50px;position:relative}
-    .steps::before{content:'';position:absolute;top:40px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);pointer-events:none}
-    .step{background:var(--card);border:1px solid var(--borderl);padding:32px 28px;border-radius:16px;position:relative;transition:border-color .2s}
-    .step:hover{border-color:var(--border)}
-    .step-num{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.1));border:1px solid rgba(99,102,241,.25);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.1rem;color:var(--accent2);margin-bottom:20px}
-    .step-title{font-size:1rem;font-weight:800;margin-bottom:8px}
-    .step-desc{font-size:.825rem;color:var(--ts);line-height:1.65}
-    .step-tag{display:inline-block;margin-top:14px;padding:4px 10px;border-radius:100px;font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
-    .tag-green{background:rgba(16,185,129,.1);color:var(--green);border:1px solid rgba(16,185,129,.25)}
-    .tag-blue{background:rgba(99,102,241,.1);color:var(--accent2);border:1px solid rgba(99,102,241,.25)}
-    .tag-yellow{background:rgba(245,158,11,.1);color:var(--yellow);border:1px solid rgba(245,158,11,.25)}
-    .tag-pink{background:rgba(236,72,153,.1);color:var(--pink);border:1px solid rgba(236,72,153,.25)}
-
-    /* ── FEATURES ── */
-    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:50px}
-    .feat-card{background:var(--card);border:1px solid var(--borderl);border-radius:18px;padding:28px;transition:all .25s;position:relative;overflow:hidden}
-    .feat-card:hover{border-color:var(--border);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.3)}
-    .feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .3s}
-    .feat-card:hover::before{opacity:1}
-    .feat-icon{width:48px;height:48px;border-radius:12px;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.18);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--accent2);transition:all .2s}
-    .feat-card:hover .feat-icon{background:linear-gradient(135deg,var(--accent),var(--a4));color:#fff;border-color:transparent}
-    .feat-icon svg{width:22px;height:22px;stroke-width:2}
-    .feat-title{font-size:1rem;font-weight:800;margin-bottom:8px}
-    .feat-desc{font-size:.825rem;color:var(--ts);line-height:1.65}
-
-    /* ── PRICING ── */
-    .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:50px;align-items:start}
-    .price-card{background:var(--card);border:1px solid var(--borderl);border-radius:20px;padding:32px;transition:all .25s;position:relative;overflow:hidden}
-    .price-card.popular{border-color:rgba(99,102,241,.5);box-shadow:0 0 40px rgba(99,102,241,.12)}
-    .popular-badge{position:absolute;top:20px;right:20px;background:linear-gradient(135deg,var(--accent),var(--a4));color:#fff;font-size:.65rem;font-weight:800;padding:4px 12px;border-radius:100px;letter-spacing:.05em;text-transform:uppercase}
-    .price-plan{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:12px}
-    .price-amount{font-size:2.8rem;font-weight:900;letter-spacing:-.04em;line-height:1}
-    .price-amount sup{font-size:1rem;vertical-align:super;color:var(--ts);font-weight:600}
-    .price-amount span{font-size:.9rem;font-weight:400;color:var(--ts)}
-    .price-desc{font-size:.825rem;color:var(--ts);margin:12px 0 24px;line-height:1.6}
-    .price-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
-    .price-feats li{font-size:.825rem;color:var(--ts);display:flex;align-items:center;gap:9px}
-    .price-feats li::before{content:'✓';color:var(--green);font-weight:800;font-size:.85rem;flex-shrink:0}
-    .price-feats li.no::before{content:'✗';color:var(--tm)}
-    .price-feats li.no{color:var(--tm)}
-    .price-divider{height:1px;background:var(--borderl);margin:24px 0}
-
-    /* ── INTEGRATION ── */
-    .integration-panel{background:var(--card2);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:50px}
-    .int-header{padding:20px 28px;border-bottom:1px solid var(--borderl);display:flex;align-items:center;gap:12px}
-    .int-title{font-size:.875rem;font-weight:700}
-    .int-sub{font-size:.775rem;color:var(--ts);margin-left:auto}
-    .int-tabs{display:flex;gap:4px;padding:16px 20px 0;background:var(--card)}
-    .int-tab{padding:8px 16px;border-radius:8px 8px 0 0;font-size:.75rem;font-weight:600;cursor:pointer;color:var(--tm);transition:.2s;border:1px solid transparent;border-bottom:none}
-    .int-tab.active{color:var(--text);background:var(--card2);border-color:var(--borderl)}
-    .int-body{padding:24px 28px;font-family:'JetBrains Mono',monospace;font-size:.775rem;line-height:1.8;background:var(--card2);min-height:200px}
-    .int-pane{display:none}.int-pane.active{display:block}
-
-    /* ── API FLOW DIAGRAM ── */
-    .flow-wrap{margin-top:50px;display:grid;grid-template-columns:1fr 520px;gap:40px;align-items:start}
-    @media(max-width:900px){.flow-wrap{grid-template-columns:1fr}}
-    .flow-col-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tm);margin-bottom:16px;padding-left:4px}
-
-    /* Nodes */
-    .fn{display:flex;flex-direction:column;align-items:center;position:relative}
-    .fn-box{width:100%;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;border:1px solid var(--borderl);background:var(--card);transition:all .25s;cursor:default}
-    .fn-box:hover{border-color:var(--border);box-shadow:0 4px 20px rgba(0,0,0,.25)}
-    .fn-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .fn-icon svg{width:18px;height:18px;stroke-width:2.2}
-    .fn-info{flex:1}
-    .fn-name{font-size:.85rem;font-weight:800;line-height:1.2}
-    .fn-desc{font-size:.72rem;color:var(--ts);margin-top:2px;line-height:1.4}
-    .fn-status{font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:100px;letter-spacing:.04em;white-space:nowrap}
-
-    /* Arrow between nodes */
-    .fn-arrow{display:flex;flex-direction:column;align-items:center;padding:3px 0;gap:0}
-    .fn-arrow-line{width:2px;height:18px;background:linear-gradient(180deg,var(--accent),var(--a3))}
-    .fn-arrow-tip{color:var(--a3);font-size:.75rem;line-height:1;margin-top:-2px}
-    .fn-arrow-label{font-size:.62rem;color:var(--tm);margin-top:2px;font-family:'JetBrains Mono',monospace}
-
-    /* Fail branch */
-    .fn-fail-branch{position:absolute;right:-130px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:0;pointer-events:none}
-    .fn-fail-line{width:40px;height:2px;background:var(--red)}
-    .fn-fail-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:6px 10px;white-space:nowrap}
-    .fn-fail-title{font-size:.68rem;font-weight:700;color:var(--red)}
-    .fn-fail-sub{font-size:.6rem;color:var(--tm);margin-top:1px}
-
-    /* Color variants */
-    .fn-blue .fn-icon{background:rgba(99,102,241,.12);color:var(--accent2)}
-    .fn-blue .fn-box{border-color:rgba(99,102,241,.2)}
-    .fn-green .fn-icon{background:rgba(16,185,129,.1);color:var(--green)}
-    .fn-green .fn-box{border-color:rgba(16,185,129,.2)}
-    .fn-yellow .fn-icon{background:rgba(245,158,11,.1);color:var(--yellow)}
-    .fn-yellow .fn-box{border-color:rgba(245,158,11,.2)}
-    .fn-red .fn-icon{background:rgba(239,68,68,.1);color:var(--red)}
-    .fn-red .fn-box{border-color:rgba(239,68,68,.2)}
-    .fn-cyan .fn-icon{background:rgba(6,182,212,.1);color:var(--a3)}
-    .fn-cyan .fn-box{border-color:rgba(6,182,212,.2)}
-    .fn-purple .fn-icon{background:rgba(139,92,246,.1);color:var(--a4)}
-    .fn-purple .fn-box{border-color:rgba(139,92,246,.2)}
-
-    /* Status tags */
-    .st-pass{background:rgba(16,185,129,.1);color:var(--green);border:1px solid rgba(16,185,129,.25)}
-    .st-fail{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.25)}
-    .st-db{background:rgba(6,182,212,.1);color:var(--a3);border:1px solid rgba(6,182,212,.25)}
-    .st-out{background:rgba(99,102,241,.1);color:var(--accent2);border:1px solid rgba(99,102,241,.25)}
-
-    /* Right panel — request trace */
-    .flow-trace{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:sticky;top:80px}
-    .flow-trace-header{padding:14px 20px;background:rgba(99,102,241,.06);border-bottom:1px solid var(--borderl);display:flex;align-items:center;gap:8px}
-    .flow-trace-title{font-size:.8rem;font-weight:700}
-    .trace-body{padding:0;font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.8}
-    .trace-line{padding:7px 20px;border-bottom:1px solid rgba(255,255,255,.03);display:flex;align-items:flex-start;gap:10px;transition:background .15s}
-    .trace-line:hover{background:rgba(99,102,241,.04)}
-    .trace-step{font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:4px;background:rgba(99,102,241,.1);color:var(--accent2);flex-shrink:0;margin-top:2px}
-    .trace-text{color:var(--ts)}
-    .trace-text .hi{color:var(--text)}
-    .trace-text .ok{color:var(--green)}
-    .trace-text .er{color:var(--red)}
-    .trace-text .ke{color:var(--yellow)}
-    .trace-text .url{color:var(--a3)}
-
-    /* ── SECURITY ── */
-    .security-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px}
-    .sec-card{background:var(--card);border:1px solid var(--borderl);border-radius:14px;padding:22px;text-align:center;transition:.2s}
-    .sec-card:hover{border-color:var(--border)}
-    .sec-icon{width:44px;height:44px;border-radius:10px;background:rgba(99,102,241,.06);display:inline-flex;align-items:center;justify-content:center;color:var(--accent2);margin-bottom:12px;transition:all .2s}
-    .sec-card:hover .sec-icon{background:linear-gradient(135deg,var(--accent),var(--a4));color:#fff}
-    .sec-icon svg{width:20px;height:20px;stroke-width:2}
-    .sec-name{font-size:.825rem;font-weight:700;margin-bottom:4px}
-    .sec-desc{font-size:.75rem;color:var(--ts);line-height:1.55}
-
-    /* ── LIVE TEST ── */
-    .tester{background:var(--card2);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:50px}
-    .tester-top{padding:18px 24px;border-bottom:1px solid var(--borderl);display:flex;align-items:center;justify-content:space-between}
-    .tester-title{font-size:.875rem;font-weight:700;display:flex;align-items:center;gap:8px}
-    .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
-    .tester-body{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-    @media(max-width:700px){.tester-body{grid-template-columns:1fr}}
-    .t-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ts);margin-bottom:8px}
-    .t-select,.t-input{width:100%;background:var(--bg);border:1px solid var(--borderl);color:var(--text);padding:10px 14px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.775rem;outline:none;transition:.2s}
-    .t-select:focus,.t-input:focus{border-color:var(--accent)}
-    .t-btn{width:100%;margin-top:12px}
-    .t-result{background:#020409;border:1px solid var(--borderl);border-radius:10px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#86efac;min-height:160px;white-space:pre-wrap;word-break:break-all;line-height:1.65}
-    .t-status{font-size:.72rem;color:var(--tm)}
-
-    /* ── CTA BANNER ── */
-    .cta-banner{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.25);border-radius:24px;padding:60px;text-align:center;margin:80px 0}
-    .cta-banner h2{font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:900;letter-spacing:-.04em;margin-bottom:12px}
-    .cta-banner p{color:var(--ts);font-size:.95rem;margin-bottom:32px}
-    .cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-
-    /* ── FOOTER ── */
-    footer{border-top:1px solid var(--borderl);padding:40px 0;text-align:center;color:var(--tm);font-size:.78rem}
-    footer strong{color:var(--ts)}
-
-    /* ── RESPONSIVE ── */
-    @media(max-width:768px){
-      .nav-links{display:none}
-      .hero{padding:130px 0 70px}
-      .steps::before{display:none}
-      .cta-banner{padding:40px 24px}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
     }
 
-    /* Scroll reveal */
-    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s}
-    .reveal.visible{opacity:1;transform:none}
-    /* Modal styles */
+    .nav-links a {
+      color: var(--ts);
+      text-decoration: none;
+      font-size: .875rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 22px;
+      border-radius: 10px;
+      font-size: .875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      transition: all .2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, .3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(99, 102, 241, .45);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--ts);
+      border: 1px solid var(--borderl);
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      background: rgba(99, 102, 241, .08);
+    }
+
+    .btn-lg {
+      padding: 14px 32px;
+      font-size: 1rem;
+      border-radius: 12px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 150px 0 90px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border-radius: 100px;
+      border: 1px solid rgba(99, 102, 241, .3);
+      background: rgba(99, 102, 241, .07);
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--accent2);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(.8)
+      }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: -.05em;
+      line-height: 1.08;
+      margin-bottom: 22px;
+    }
+
+    .grad {
+      background: linear-gradient(135deg, #f1f5f9 0%, #c7d2fe 60%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .grad2 {
+      background: linear-gradient(135deg, var(--accent), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--ts);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Trust badges */
+    .trust-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--tm);
+      padding: 6px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--borderl);
+      background: rgba(255, 255, 255, .02);
+    }
+
+    .trust-item svg {
+      opacity: .6;
+    }
+
+    /* ── CODE PREVIEW ── */
+    .code-preview-wrap {
+      max-width: 680px;
+      margin: 60px auto 0;
+      text-align: left;
+    }
+
+    .code-window {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .code-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, .03);
+      border-bottom: 1px solid var(--borderl);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-r {
+      background: #ef4444;
+    }
+
+    .dot-y {
+      background: #f59e0b;
+    }
+
+    .dot-g {
+      background: #10b981;
+    }
+
+    .code-file {
+      font-size: .72rem;
+      color: var(--tm);
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-tabs-bar {
+      display: flex;
+      gap: 4px;
+      padding: 8px 8px 0;
+      background: var(--card2);
+    }
+
+    .ctab {
+      padding: 6px 14px;
+      border-radius: 7px 7px 0 0;
+      font-size: .72rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--tm);
+      transition: all .2s;
+    }
+
+    .ctab.active {
+      background: var(--card);
+      color: var(--text);
+    }
+
+    .code-body {
+      padding: 22px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .775rem;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .code-pane {
+      display: none;
+    }
+
+    .code-pane.active {
+      display: block;
+    }
+
+    .c-cm {
+      color: #475569;
+    }
+
+    .c-kw {
+      color: #c084fc;
+    }
+
+    .c-st {
+      color: #86efac;
+    }
+
+    .c-nm {
+      color: #fda4af;
+    }
+
+    .c-ky {
+      color: #93c5fd;
+    }
+
+    .c-url {
+      color: #67e8f9;
+    }
+
+    .c-ok {
+      color: #10b981;
+    }
+
+    /* ── SECTION FRAMEWORK ── */
+    .section {
+      padding: 90px 0;
+    }
+
+    .section-label {
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .section-sub {
+      color: var(--ts);
+      font-size: .925rem;
+      max-width: 500px;
+      line-height: 1.75;
+    }
+
+    .centered {
+      text-align: center;
+    }
+
+    .centered .section-sub {
+      margin: 0 auto;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 52px;
+    }
+
+    @media (max-width: 900px) {
+      .steps-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--borderl);
+      border-radius: 16px;
+      padding: 28px 24px;
+      position: relative;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .step-card:hover {
+      border-color: var(--border);
+      transform: translateY(-3px);
+    }
+
+    .step-num {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, .15), rgba(139, 92, 246, .1));
+      border: 1px solid rgba(99, 102, 241, .25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--accent2);
+      margin-bottom: 18px;
+    }
+
+    .step-title {
+      font-size: .975rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .step-body {
+      font-size: .825rem;
+      color: var(--ts);
+      line-height: 1.7;
+    }
+
+    .step-tag {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .tag-green {
+      background: rgba(16, 185, 129, .1);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, .25);
+    }
+
+    .tag-blue {
+      background: rgba(99, 102, 241, .1);
+      color: var(--accent2);
+      border: 1px solid rgba(99, 102, 241, .25);
+    }
+
+    .tag-cyan {
+      background: rgba(6, 182, 212, .1);
+      color: var(--cyan);
+      border: 1px solid rgba(6, 182, 212, .25);
+    }
+
+    .tag-purple {
+      background: rgba(139, 92, 246, .1);
+      color: var(--purple);
+      border: 1px solid rgba(139, 92, 246, .25);
+    }
+
+    /* ── WHO USES IT ── */
+    .use-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 48px;
+    }
+
+    @media (max-width: 900px) {
+      .use-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .use-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .use-card {
+      background: var(--card);
+      border: 1px solid var(--borderl);
+      border-radius: 16px;
+      padding: 26px 22px;
+      transition: all .25s;
+    }
+
+    .use-card:hover {
+      border-color: var(--border);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .25);
+    }
+
+    .use-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .use-title {
+      font-size: .975rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .use-body {
+      font-size: .8rem;
+      color: var(--ts);
+      line-height: 1.65;
+    }
+
+    /* ── FEATURES ── */
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 50px;
+    }
+
+    @media (max-width: 900px) {
+      .feat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .feat-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feat-card {
+      background: var(--card);
+      border: 1px solid var(--borderl);
+      border-radius: 16px;
+      padding: 26px 22px;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+    .feat-card:hover {
+      border-color: var(--border);
+      transform: translateY(-3px);
+    }
+
+    .feat-card:hover::before {
+      opacity: 1;
+    }
+
+    .feat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+      background: rgba(99, 102, 241, .06);
+      border: 1px solid rgba(99, 102, 241, .18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent2);
+      margin-bottom: 18px;
+      transition: all .2s;
+    }
+
+    .feat-card:hover .feat-icon {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .feat-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    .feat-title {
+      font-size: .975rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .feat-body {
+      font-size: .8rem;
+      color: var(--ts);
+      line-height: 1.65;
+    }
+
+    /* ── PRICING ── */
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 50px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .price-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .price-card {
+      background: var(--card);
+      border: 1px solid var(--borderl);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .price-card.featured {
+      border-color: rgba(99, 102, 241, .5);
+      box-shadow: 0 0 40px rgba(99, 102, 241, .1);
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      color: #fff;
+      font-size: .62rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 100px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .price-plan {
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ts);
+      margin-bottom: 10px;
+    }
+
+    .price-amount {
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: 1;
+    }
+
+    .price-amount sup {
+      font-size: .95rem;
+      vertical-align: super;
+      color: var(--ts);
+      font-weight: 500;
+    }
+
+    .price-amount .period {
+      font-size: .85rem;
+      font-weight: 400;
+      color: var(--ts);
+    }
+
+    .price-desc {
+      font-size: .8rem;
+      color: var(--ts);
+      margin: 12px 0 22px;
+      line-height: 1.65;
+    }
+
+    .price-divider {
+      height: 1px;
+      background: var(--borderl);
+      margin: 20px 0;
+    }
+
+    .price-feats {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .price-feats li {
+      font-size: .8rem;
+      color: var(--ts);
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .price-feats li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .price-feats li.no::before {
+      content: '✗';
+      color: var(--tm);
+    }
+
+    .price-feats li.no {
+      color: var(--tm);
+    }
+
+    .price-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ── API DOCS PANEL ── */
+    .docs-panel {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-top: 50px;
+    }
+
+    .docs-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--borderl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .docs-title {
+      font-size: .875rem;
+      font-weight: 700;
+    }
+
+    .docs-base {
+      font-size: .75rem;
+      color: var(--ts);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .docs-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px 0;
+      background: var(--card);
+    }
+
+    .dtab {
+      padding: 8px 16px;
+      border-radius: 8px 8px 0 0;
+      font-size: .72rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--tm);
+      transition: .2s;
+      border: 1px solid transparent;
+      border-bottom: none;
+    }
+
+    .dtab.active {
+      color: var(--text);
+      background: var(--card2);
+      border-color: var(--borderl);
+    }
+
+    .docs-body {
+      padding: 24px 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      line-height: 1.85;
+      min-height: 190px;
+    }
+
+    .dpane {
+      display: none;
+    }
+
+    .dpane.active {
+      display: block;
+    }
+
+    /* ── LIVE TESTER ── */
+    .tester {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-top: 50px;
+    }
+
+    .tester-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--borderl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tester-title {
+      font-size: .875rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    .tester-body {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 680px) {
+      .tester-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .t-label {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--ts);
+      margin-bottom: 8px;
+    }
+
+    .t-select,
+    .t-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--borderl);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 9px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      outline: none;
+      transition: .2s;
+    }
+
+    .t-select:focus,
+    .t-input:focus {
+      border-color: var(--accent);
+    }
+
+    .t-btn {
+      width: 100%;
+      margin-top: 12px;
+      justify-content: center;
+    }
+
+    .t-result {
+      background: #020408;
+      border: 1px solid var(--borderl);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: #86efac;
+      min-height: 200px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.7;
+    }
+
+    .t-status {
+      font-size: .72rem;
+      color: var(--tm);
+    }
+
+
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--borderl);
+      padding: 44px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-left p {
+      font-size: .78rem;
+      color: var(--tm);
+      margin-top: 8px;
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-right a {
+      font-size: .78rem;
+      color: var(--tm);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .footer-right a:hover {
+      color: var(--ts);
+    }
+
+    /* ── MODAL ── */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(4, 6, 15, 0.8);
-      backdrop-filter: blur(8px);
+      background: rgba(5, 8, 16, .85);
+      backdrop-filter: blur(10px);
       z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-    .modal-content {
+
+    .modal-box {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 20px;
       width: 100%;
       max-width: 500px;
       overflow: hidden;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-      animation: modalFadeIn 0.3s ease-out;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
+      animation: mfadein .3s ease-out;
     }
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    @keyframes mfadein {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    .modal-header {
+
+    .modal-head {
       padding: 20px 24px;
       border-bottom: 1px solid var(--borderl);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .modal-title {
+
+    .modal-head-title {
       font-size: 1.1rem;
       font-weight: 800;
-      color: var(--text);
     }
+
     .modal-close {
       font-size: 1.5rem;
       color: var(--ts);
       cursor: pointer;
-      transition: color 0.2s;
+      transition: color .2s;
     }
+
     .modal-close:hover {
       color: var(--text);
     }
+
     .modal-body {
       padding: 24px;
     }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media(max-width: 500px) {
-      .form-grid { grid-template-columns: 1fr; }
-    }
-    .modal-label {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--ts);
-      margin-bottom: 8px;
-    }
-    .modal-input, .modal-select {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--borderl);
-      color: var(--text);
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
-      outline: none;
-      transition: 0.2s;
-    }
-    .modal-input:focus, .modal-select:focus {
-      border-color: var(--accent);
-    }
 
-    /* Multi-step Payment Modal Styles */
-    .modal-steps {
+    .m-steps-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 24px 24px 8px;
       gap: 10px;
+      margin-bottom: 24px;
     }
-    .m-step {
-      width: 32px;
-      height: 32px;
+
+    .ms {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: .78rem;
       font-weight: 700;
       border: 1.5px solid var(--borderl);
       color: var(--ts);
       background: var(--bg);
-      transition: all 0.3s ease;
+      transition: all .3s;
       flex-shrink: 0;
     }
-    .m-step.active {
-      background: linear-gradient(135deg, var(--accent), var(--a4));
+
+    .ms.active {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
       color: #fff;
       border-color: transparent;
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 12px rgba(99, 102, 241, .4);
     }
-    .m-step.done {
+
+    .ms.done {
       background: var(--green);
       color: #fff;
       border-color: transparent;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 0 10px rgba(16, 185, 129, .4);
     }
-    .m-step-line {
+
+    .ms-line {
       flex: 1;
       height: 2px;
       background: var(--borderl);
-      transition: all 0.3s ease;
+      transition: all .3s;
     }
-    .m-step-line.done {
+
+    .ms-line.done {
       background: var(--green);
     }
-    
-    .m-plan-summary {
-      background: rgba(99, 102, 241, 0.05);
+
+    .plan-summary-box {
+      background: rgba(99, 102, 241, .05);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
-      text-align: left;
       margin-bottom: 20px;
     }
-    .m-plan-name {
-      font-size: 0.95rem;
+
+    .plan-summary-name {
+      font-size: .95rem;
       font-weight: 800;
-      color: var(--text);
     }
-    .m-plan-price {
+
+    .plan-summary-price {
       font-size: 1.8rem;
       font-weight: 900;
       color: var(--accent2);
       margin-top: 4px;
     }
-    .m-plan-price span {
-      font-size: 0.8rem;
+
+    .plan-summary-price span {
+      font-size: .78rem;
       font-weight: 400;
       color: var(--ts);
     }
-    .m-plan-quota {
-      font-size: 0.78rem;
+
+    .plan-summary-quota {
+      font-size: .78rem;
       color: var(--ts);
       margin-top: 4px;
     }
 
+    .fgroup {
+      margin-bottom: 16px;
+    }
+
+    .fgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 480px) {
+      .fgrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .flabel {
+      display: block;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--ts);
+      margin-bottom: 7px;
+    }
+
+    .finput,
+    .fselect {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--borderl);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: .85rem;
+      outline: none;
+      transition: .2s;
+    }
+
+    .finput:focus,
+    .fselect:focus {
+      border-color: var(--accent);
+    }
+
+    /* Payment methods */
     .pay-methods {
       display: flex;
       flex-direction: column;
       gap: 10px;
       margin-top: 16px;
     }
+
     .pay-method {
       display: flex;
       align-items: center;
@@ -417,20 +1263,22 @@
       border: 1px solid var(--borderl);
       background: var(--bg);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all .2s;
       position: relative;
     }
+
     .pay-method:hover {
       border-color: var(--border);
-      background: rgba(255, 255, 255, 0.02);
     }
-    .pay-method.active {
+
+    .pay-method.selected {
       border-color: var(--accent);
-      background: rgba(99, 102, 241, 0.08);
+      background: rgba(99, 102, 241, .08);
     }
-    .pay-method-icon {
-      width: 36px;
-      height: 36px;
+
+    .pm-icon {
+      width: 34px;
+      height: 34px;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -438,77 +1286,89 @@
       margin-right: 14px;
       flex-shrink: 0;
     }
-    .pay-method-info {
+
+    .pm-info {
       flex: 1;
-      text-align: left;
-    }
-    .pay-method-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .pay-method-sub {
-      font-size: 0.72rem;
-      color: var(--ts);
-      margin-top: 2px;
-    }
-    .pay-check {
-      font-size: 1.1rem;
-      font-weight: 900;
-      color: var(--green);
-      position: absolute;
-      right: 16px;
     }
 
-    .pay-qr-box {
+    .pm-name {
+      font-size: .85rem;
+      font-weight: 700;
+    }
+
+    .pm-sub {
+      font-size: .72rem;
+      color: var(--ts);
+      margin-top: 1px;
+    }
+
+    .pm-check {
+      position: absolute;
+      right: 16px;
+      color: var(--green);
+      font-weight: 900;
+      font-size: 1rem;
+    }
+
+    /* QR payment */
+    .qr-box {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 24px;
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, .02);
       border: 1px dashed var(--borderl);
       border-radius: 12px;
       margin-top: 12px;
     }
-    .pay-qr-placeholder {
+
+    .qr-img {
       background: #fff;
       padding: 12px;
       border-radius: 8px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
     }
-    .pay-qr-label {
-      font-size: 0.8rem;
-      font-weight: 600;
+
+    .qr-number {
+      font-size: 1.3rem;
+      font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
       color: var(--text);
+      letter-spacing: .1em;
       margin-top: 14px;
     }
-    .pay-amount-box {
+
+    .qr-name {
+      font-size: .72rem;
+      color: var(--ts);
+      margin-top: 4px;
+    }
+
+    .amount-box {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 14px 18px;
-      background: rgba(99, 102, 241, 0.05);
+      background: rgba(99, 102, 241, .05);
       border: 1px solid var(--borderl);
       border-radius: 12px;
       margin-top: 16px;
-      text-align: left;
     }
 
+    /* Card preview */
     .card-preview {
-      background: linear-gradient(135deg, #161a36, #2d2d63);
+      background: linear-gradient(135deg, #161a36, #2a2d6e);
       border-radius: 14px;
       padding: 20px;
       color: #fff;
-      text-align: left;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .4);
+      border: 1px solid rgba(255, 255, 255, .08);
       margin-bottom: 20px;
-      position: relative;
     }
+
     .card-chip {
       width: 36px;
       height: 26px;
@@ -516,93 +1376,94 @@
       border-radius: 6px;
       margin-bottom: 20px;
     }
+
     .card-number {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.2rem;
-      letter-spacing: 0.08em;
+      font-size: 1.15rem;
+      letter-spacing: .08em;
       margin-bottom: 20px;
-      color: #fff;
     }
+
     .card-info-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
-    }
-    .card-label {
-      font-size: 0.58rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: rgba(255, 255, 255, 0.4);
-      margin-bottom: 2px;
-    }
-    .card-val {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: #fff;
     }
 
+    .card-lbl {
+      font-size: .55rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255, 255, 255, .4);
+      margin-bottom: 2px;
+    }
+
+    .card-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    /* Bank transfer */
     .bank-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
       margin-bottom: 16px;
     }
+
     .bank-item {
       display: flex;
       align-items: center;
       padding: 12px 14px;
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, .02);
       border: 1px solid var(--borderl);
       border-radius: 10px;
-      text-align: left;
     }
+
     .bank-logo {
-      width: 46px;
-      height: 28px;
-      border-radius: 6px;
+      width: 44px;
+      height: 26px;
+      border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.72rem;
+      font-size: .7rem;
       font-weight: 900;
       color: #fff;
       margin-right: 14px;
       flex-shrink: 0;
     }
-    .bank-logo.bdo { background: #0038a8; }
-    .bank-logo.bpi { background: #d01118; }
-    .bank-logo.ubp { background: #f26622; }
-    .bank-details {
-      flex: 1;
-    }
+
     .bank-acct-name {
-      font-size: 0.78rem;
+      font-size: .78rem;
       font-weight: 700;
-      color: var(--text);
     }
+
     .bank-acct-num {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
+      font-size: .8rem;
       color: var(--accent2);
       margin-top: 2px;
     }
 
-    .processing-spinner {
+    /* Processing & Success */
+    .spinner {
       width: 48px;
       height: 48px;
       border: 3px solid var(--borderl);
       border-top-color: var(--accent);
       border-radius: 50%;
       display: inline-block;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+      animation: spin .8s linear infinite;
     }
 
-    .success-icon {
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .success-circle {
       width: 56px;
       height: 56px;
       border-radius: 50%;
@@ -610,1294 +1471,840 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 20px rgba(16, 185, 129, .3);
     }
-    .key-display {
-      background: rgba(255, 255, 255, 0.02);
+
+    .key-box {
+      background: rgba(255, 255, 255, .02);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
       margin: 20px 0;
     }
-    .key-plan-badge {
+
+    .key-label {
+      font-size: .62rem;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .key-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--borderl);
+      color: #86efac;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      text-align: center;
+      outline: none;
+    }
+
+    .plan-badge {
       display: inline-block;
-      background: rgba(99, 102, 241, 0.1);
+      background: rgba(99, 102, 241, .1);
       color: var(--accent2);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      font-size: 0.72rem;
+      border: 1px solid rgba(99, 102, 241, .2);
+      font-size: .7rem;
       font-weight: 700;
-      padding: 6px 14px;
+      padding: 5px 14px;
       border-radius: 100px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+    }
+
+    /* ── MODAL BUTTON ROWS ── */
+    .modal-btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .modal-note {
+      text-align: center;
+      font-size: .68rem;
+      color: var(--tm);
+      margin-top: 10px;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
     }
   </style>
 </head>
+
 <body>
-<div class="blob b1"></div>
-<div class="blob b2"></div>
-<div class="blob b3"></div>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
 
-<!-- ── NAV ── -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="logo">
-      <img src="logo_tight.png" alt="InventaAPI Logo" class="brand-logo" />
-    </a>
-    <div class="nav-links">
-      <a href="#how-it-works">How It Works</a>
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#docs">API Docs</a>
-      <a href="#live-test">Live Demo</a>
-    </div>
-    <div class="nav-cta">
-      <a href="#pricing" class="btn btn-ghost">View Plans</a>
-      <a href="javascript:void(0)" onclick="openModal('professional')" class="btn btn-primary">Get API Key</a>
-    </div>
-  </div>
-</nav>
-
-<!-- ── HERO ── -->
-<div class="wrap">
-  <div class="hero reveal">
-    <div class="hero-badge">Built for Philippine SMEs · DaaS Platform</div>
-    <h1>
-      <span class="grad">Sell your inventory data.</span><br/>
-      <span class="grad2">Power every business.</span>
-    </h1>
-    <p class="hero-sub">
-      InventaAPI is a <strong>Data-as-a-Service startup</strong> — we built the API so other businesses can buy access and connect their systems directly to real-time SME inventory, product catalog, and sales analytics. No copies. No manual exports. Just live data.
-    </p>
-    <div class="hero-actions">
-      <a href="javascript:void(0)" onclick="openModal('professional')" class="btn btn-primary btn-lg">Buy API Access</a>
-      <a href="#live-test" class="btn btn-outline btn-lg">Try Live Demo</a>
-    </div>
-    <div class="hero-social-proof">
-      <div class="proof-item">JWT + API Key Security</div>
-      <div class="proof-item">DPA 2012 Compliant</div>
-      <div class="proof-item">Multi-Business Ready</div>
-      <div class="proof-item">150 req/15min Rate Limit</div>
-    </div>
-
-    <!-- Code preview -->
-    <div class="code-preview">
-      <div class="code-tabs">
-        <div class="code-tab active" onclick="switchTab('curl')">cURL</div>
-        <div class="code-tab" onclick="switchTab('js')">JavaScript</div>
-        <div class="code-tab" onclick="switchTab('python')">Python</div>
-        <div class="code-tab" onclick="switchTab('php')">PHP</div>
-      </div>
-      <div id="tab-curl" class="code-pane active">
-<span class="c-cm"># 1. Get your API key from your dashboard after subscribing</span>
-<span class="c-cm"># 2. Start pulling live product catalog data immediately</span>
-
-curl -X GET <span class="c-url">https://inventaapi.ph/daas/catalog?businessType=hardware</span> \
-  -H <span class="c-st">"x-api-key: your_api_key_here"</span>
-
-<span class="c-cm"># ✅ Response — live structured product data</span>
-{
-  <span class="c-ky">"meta"</span>: { <span class="c-ky">"count"</span>: <span class="c-nm">12</span>, <span class="c-ky">"compliance"</span>: <span class="c-st">"DPA 2012"</span> },
-  <span class="c-ky">"catalog"</span>: [
-    {
-      <span class="c-ky">"sku"</span>: <span class="c-st">"prod_hw_1"</span>,
-      <span class="c-ky">"name"</span>: <span class="c-st">"Deformed Steel Bar"</span>,
-      <span class="c-ky">"pricing"</span>: { <span class="c-ky">"retail"</span>: <span class="c-nm">245</span>, <span class="c-ky">"currency"</span>: <span class="c-st">"PHP"</span> },
-      <span class="c-ky">"inventory"</span>: { <span class="c-ky">"status"</span>: <span class="c-ok">"IN_STOCK"</span>, <span class="c-ky">"availableStock"</span>: <span class="c-nm">120</span> }
-    }
-  ]
-}</div>
-      <div id="tab-js" class="code-pane">
-<span class="c-cm">// Install: npm install axios  OR use native fetch</span>
-<span class="c-kw">const</span> API_KEY = <span class="c-st">"your_api_key_here"</span>; <span class="c-cm">// from your InventaAPI dashboard</span>
-<span class="c-kw">const</span> BASE_URL = <span class="c-st">"https://inventaapi.ph"</span>;
-
-<span class="c-cm">// Fetch live hardware product catalog</span>
-<span class="c-kw">const</span> response = <span class="c-kw">await</span> fetch(`${BASE_URL}/daas/catalog?businessType=hardware`, {
-  headers: { <span class="c-st">"x-api-key"</span>: API_KEY }
-});
-
-<span class="c-kw">const</span> { catalog } = <span class="c-kw">await</span> response.json();
-catalog.forEach(product => {
-  console.log(`${product.name} — ₱${product.pricing.retail} — ${product.inventory.status}`);
-});
-
-<span class="c-cm">// Output:</span>
-<span class="c-cm">// Deformed Steel Bar — ₱245 — IN_STOCK</span>
-<span class="c-cm">// Emerald PVC Sanitary Pipe — ₱380 — IN_STOCK</span></div>
-      <div id="tab-python" class="code-pane">
-<span class="c-cm"># pip install requests</span>
-<span class="c-kw">import</span> requests
-
-API_KEY = <span class="c-st">"your_api_key_here"</span>  <span class="c-cm"># from your InventaAPI dashboard</span>
-BASE_URL = <span class="c-st">"https://inventaapi.ph"</span>
-
-<span class="c-cm"># Get live product catalog + sales feed</span>
-catalog = requests.get(
-    f<span class="c-st">"{BASE_URL}/daas/catalog"</span>,
-    params={<span class="c-st">"businessType"</span>: <span class="c-st">"hardware"</span>},
-    headers={<span class="c-st">"x-api-key"</span>: API_KEY}
-).json()
-
-sales = requests.get(
-    f<span class="c-st">"{BASE_URL}/daas/sales-feed"</span>,
-    headers={<span class="c-st">"x-api-key"</span>: API_KEY}
-).json()
-
-<span class="c-kw">print</span>(f<span class="c-st">"Total Products: {catalog['meta']['count']}"</span>)
-<span class="c-kw">print</span>(f<span class="c-st">"Total Revenue: ₱{sales['summary']['totalRevenue']}"</span>)</div>
-      <div id="tab-php" class="code-pane">
-<span class="c-cm">// Using PHP cURL — no external libraries needed</span>
-$api_key = <span class="c-st">"your_api_key_here"</span>; <span class="c-cm">// from your InventaAPI dashboard</span>
-$url = <span class="c-st">"https://inventaapi.ph/daas/catalog?businessType=grocery"</span>;
-
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [<span class="c-st">"x-api-key: $api_key"</span>]);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="c-kw">true</span>);
-$response = json_decode(curl_exec($ch), <span class="c-kw">true</span>);
-curl_close($ch);
-
-<span class="c-cm">// Loop through live products</span>
-<span class="c-kw">foreach</span> ($response[<span class="c-st">'catalog'</span>] <span class="c-kw">as</span> $product) {
-    echo $product[<span class="c-st">'name'</span>] . <span class="c-st">" — ₱"</span> . $product[<span class="c-st">'pricing'</span>][<span class="c-st">'retail'</span>] . <span class="c-st">"\n"</span>;
-}</div>
-    </div>
-  </div>
-</div>
-
-<!-- ── HOW IT WORKS ── -->
-<div class="section" id="how-it-works">
-  <div class="wrap reveal">
-    <div class="section-label">How It Works</div>
-    <div class="section-title">From signup to live data<br/>in under 5 minutes</div>
-    <div class="section-sub">No complex setup. No database copies. No manual exports. Just subscribe, get your key, and start integrating.</div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-title">Choose a Plan & Subscribe</div>
-        <div class="step-desc">Pick a subscription tier that fits your business — Starter, Professional, or Enterprise. Pay monthly via GCash, Maya, or bank transfer.</div>
-        <span class="step-tag tag-green">Subscription</span>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-title">Receive Your API Key</div>
-        <div class="step-desc">After payment, you get a unique <code style="color:var(--a3);font-family:'JetBrains Mono',monospace;font-size:.8em">x-api-key</code> credential. This is your identity — it controls your access level and usage limits.</div>
-        <span class="step-tag tag-blue">Authentication</span>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-title">Integrate into Your System</div>
-        <div class="step-desc">Add the API key to your existing app, ERP, website, or script. Works with any language — Python, JavaScript, PHP, Java, SAP, Oracle, and more.</div>
-        <span class="step-tag tag-yellow">Integration</span>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-title">Access Live Data Always</div>
-        <div class="step-desc">Your system now receives real-time product prices, stock levels, and sales analytics — directly from our secure DaaS engine. Data always fresh.</div>
-        <span class="step-tag tag-pink">Live Data</span>
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <img src="logo_tight.png" alt="InventaAPI" class="brand-logo" />
+      </a>
+      <div class="nav-links">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#who-uses">Use Cases</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
       </div>
     </div>
-  </div>
-</div>
+  </nav>
 
-<!-- ── API REQUEST FLOW DIAGRAM ── -->
-<div class="section" style="padding-top:0" id="flow">
-  <div class="wrap reveal">
-    <div class="section-label">How the API Works</div>
-    <div class="section-title">From your system to live data<br/>in milliseconds</div>
-    <div class="section-sub">Every request passes through our multi-layer security engine. Your API key is the only credential you need — we handle all the protection behind the scenes.</div>
-
-    <div class="flow-wrap" style="margin-top:32px">
-      <!-- LEFT — Visual node flow -->
-      <div>
-        <div class="flow-col-label">Request Journey (Top → Bottom)</div>
-
-        <!-- Node 1: Buyer -->
-        <div class="fn fn-blue">
-          <div class="fn-box">
-            <div class="fn-info">
-              <div class="fn-name">Your Business System</div>
-              <div class="fn-desc">Send a request with your API key in the header — works from any language, app, or platform</div>
-            </div>
-            <span class="fn-status st-out">REQUEST</span>
-          </div>
-        </div>
-        <div class="fn-arrow"><div class="fn-arrow-line"></div><div class="fn-arrow-tip">▼</div><div class="fn-arrow-label">HTTPS Request + x-api-key</div></div>
-
-        <!-- Node 2: Security Layer -->
-        <div class="fn fn-yellow" style="margin-right:120px">
-          <div class="fn-box">
-            <div class="fn-info">
-              <div class="fn-name">Multi-Layer Security Engine</div>
-              <div class="fn-desc">Your request is automatically screened — attack protection, origin validation, and usage limits enforced</div>
-            </div>
-            <span class="fn-status st-pass">SECURED</span>
-          </div>
-          <div class="fn-fail-branch">
-            <div class="fn-fail-line"></div>
-            <div class="fn-fail-box">
-              <div class="fn-fail-title">REJECTED</div>
-              <div class="fn-fail-sub">Threat detected</div>
-            </div>
-          </div>
-        </div>
-        <div class="fn-arrow"><div class="fn-arrow-line"></div><div class="fn-arrow-tip">▼</div></div>
-
-        <!-- Node 3: API Key Verified -->
-        <div class="fn fn-yellow" style="margin-right:120px">
-          <div class="fn-box">
-            <div class="fn-info">
-              <div class="fn-name">API Key Verification</div>
-              <div class="fn-desc">Your unique API key is validated — confirms you are an active subscriber with the correct plan</div>
-            </div>
-            <span class="fn-status st-pass">VERIFIED</span>
-          </div>
-          <div class="fn-fail-branch">
-            <div class="fn-fail-line"></div>
-            <div class="fn-fail-box">
-              <div class="fn-fail-title">401 Error</div>
-              <div class="fn-fail-sub">Invalid / no key</div>
-            </div>
-          </div>
-        </div>
-        <div class="fn-arrow"><div class="fn-arrow-line"></div><div class="fn-arrow-tip">▼</div></div>
-
-        <!-- Node 4: Rate Check -->
-        <div class="fn fn-yellow" style="margin-right:120px">
-          <div class="fn-box">
-            <div class="fn-info">
-              <div class="fn-name">Usage Quota Check</div>
-              <div class="fn-desc">Your plan's request limit is checked — Starter: 50/day · Professional: 5,000/day · Enterprise: Unlimited</div>
-            </div>
-            <span class="fn-status st-pass">WITHIN QUOTA</span>
-          </div>
-          <div class="fn-fail-branch">
-            <div class="fn-fail-line"></div>
-            <div class="fn-fail-box">
-              <div class="fn-fail-title">429 Error</div>
-              <div class="fn-fail-sub">Quota exceeded</div>
-            </div>
-          </div>
-        </div>
-        <div class="fn-arrow"><div class="fn-arrow-line"></div><div class="fn-arrow-tip">▼</div><div class="fn-arrow-label">All checks passed!</div></div>
-
-        <!-- Node 5: Data Retrieval -->
-        <div class="fn fn-cyan">
-          <div class="fn-box">
-            <div class="fn-info">
-              <div class="fn-name">Secure Data Retrieval</div>
-              <div class="fn-desc">The requested data is fetched from the SME's secure inventory database and formatted for your system</div>
-            </div>
-            <span class="fn-status st-db">PROCESSED</span>
-          </div>
-        </div>
-        <div class="fn-arrow"><div class="fn-arrow-line"></div><div class="fn-arrow-tip">▼</div><div class="fn-arrow-label">Structured JSON</div></div>
-
-        <!-- Node 6: Response -->
-        <div class="fn fn-green">
-          <div class="fn-box">
-            <div class="fn-info">
-              <div class="fn-name">Live Data Delivered to You</div>
-              <div class="fn-desc">HTTP 200 OK — product prices, stock levels, specs, and images returned in structured JSON format</div>
-            </div>
-            <span class="fn-status st-pass">DELIVERED</span>
-          </div>
-        </div>
-        <div class="fn-arrow"><div class="fn-arrow-line"></div><div class="fn-arrow-tip">▼</div></div>
-
-        <!-- Node 7: Use -->
-        <div class="fn fn-blue">
-          <div class="fn-box">
-            <div class="fn-info">
-              <div class="fn-name">Your System Uses the Data</div>
-              <div class="fn-desc">Auto-reorder triggers · Prices sync to your online store · Dashboard updates · ERP report generated</div>
-            </div>
-            <span class="fn-status st-out">SUCCESS</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT — What YOU as a subscriber experience -->
-      <div>
-        <div class="flow-col-label">Interactive Live Response Sandbox</div>
-
-        <!-- Subscriber experience -->
-        <div class="flow-trace">
-          <div class="flow-trace-header">
-            <span class="live-dot"></span>
-            <span class="flow-trace-title">Your API Request & Response</span>
-          </div>
-          <div class="trace-body">
-            <div class="trace-line">
-              <span class="trace-step">YOU</span>
-              <span class="trace-text">Send a request with <span class="ke">x-api-key</span> in the header</span>
-            </div>
-            <div class="trace-line">
-              <span class="trace-step">REQ</span>
-              <span class="trace-text"><span class="url">GET /daas/catalog?businessType=hardware</span></span>
-            </div>
-            <div class="trace-line">
-              <span class="trace-step">HDR</span>
-              <span class="trace-text"><span class="ke">x-api-key:</span> <span style="color:#fbbf24">your_unique_api_key</span></span>
-            </div>
-            <div class="trace-line" style="background:rgba(99,102,241,.03)">
-              <span class="trace-step">SEC</span>
-              <span class="trace-text">Security checks run automatically <span class="ok">✓</span></span>
-            </div>
-            <div class="trace-line" style="background:rgba(99,102,241,.03)">
-              <span class="trace-step">KEY</span>
-              <span class="trace-text">Your subscription validated <span class="ok">✓ Professional Plan</span></span>
-            </div>
-            <div class="trace-line" style="background:rgba(16,185,129,.04)">
-              <span class="trace-step">RES</span>
-              <span class="trace-text"><span class="ok">HTTP 200 OK</span> — data delivered in ~50ms</span>
-            </div>
-            <div class="trace-line" style="background:rgba(16,185,129,.04)">
-              <span class="trace-step">DATA</span>
-              <span class="trace-text">You receive <span class="ok">structured JSON</span> — ready to use</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sample response the buyer sees -->
-        <div style="margin-top:16px;background:#020409;border:1px solid var(--borderl);border-radius:12px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.8">
-          <div style="font-size:.65rem;font-weight:800;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📦 Sample Response You Receive</div>
-          <div><span class="c-ky">"catalog"</span>: [</div>
-          <div style="padding-left:16px">{</div>
-          <div style="padding-left:32px"><span class="c-ky">"sku"</span>: <span class="c-st">"prod_hw_1"</span>,</div>
-          <div style="padding-left:32px"><span class="c-ky">"name"</span>: <span class="c-st">"Deformed Steel Bar"</span>,</div>
-          <div style="padding-left:32px"><span class="c-ky">"pricing"</span>: { <span class="c-ky">"retail"</span>: <span class="c-nm">245</span>, <span class="c-ky">"currency"</span>: <span class="c-st">"PHP"</span> },</div>
-          <div style="padding-left:32px"><span class="c-ky">"inventory"</span>: { <span class="c-ky">"status"</span>: <span class="c-ok">"IN_STOCK"</span>, <span class="c-ky">"stock"</span>: <span class="c-nm">120</span> },</div>
-          <div style="padding-left:32px"><span class="c-ky">"specs"</span>: { <span class="c-ky">"size"</span>: <span class="c-st">"12mm x 6m"</span> }</div>
-          <div style="padding-left:16px">}</div>
-          <div>]</div>
-        </div>
-
-        <!-- Error responses buyer might get -->
-        <div style="margin-top:16px;background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:16px 20px">
-          <div style="font-size:.72rem;font-weight:800;color:var(--red);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">❌ If You Send a Wrong/Missing API Key</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.7">
-            <div style="color:var(--tm)">HTTP → <span style="color:var(--red)">401 Unauthorized</span></div>
-            <div style="color:var(--tm)">MSG → <span style="color:#fca5a5">"Valid API key required."</span></div>
-            <div style="color:var(--tm)">FIX → <span style="color:var(--ts)">Check your key or subscribe at /pricing</span></div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:16px 20px">
-          <div style="font-size:.72rem;font-weight:800;color:var(--yellow);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">⚠️ If You Exceed Your Plan Quota</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.7">
-            <div style="color:var(--tm)">HTTP → <span style="color:var(--red)">429 Too Many Requests</span></div>
-            <div style="color:var(--tm)">MSG → <span style="color:#fca5a5">"Quota exceeded. Resets in 15 minutes."</span></div>
-            <div style="color:var(--tm)">FIX → <span style="color:var(--ts)">Upgrade your plan or wait for reset</span></div>
-          </div>
-        </div>
-
-
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── USE CASES ── -->
-<div class="section" style="padding-top:0">
-  <div class="wrap reveal">
-    <div class="section-label">Who Uses InventaAPI</div>
-    <div class="section-title">Built for every business<br/>in the supply chain</div>
-    <div class="features-grid" style="margin-top:40px">
-      <div class="feat-card">
-        <div class="feat-title">Suppliers & Distributors</div>
-        <div class="feat-desc">Monitor your client's inventory levels in real-time. Know when stock is running low so you can proactively send replenishment orders — without waiting for manual purchase orders.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">E-commerce Platforms</div>
-        <div class="feat-desc">Sync product availability, pricing, and images directly from the API. Your online store always shows accurate stock status without any manual catalog updates.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Enterprise ERP Systems</div>
-        <div class="feat-desc">Connect SAP, Oracle, or any custom ERP to pull structured product and sales data. Replace CSV exports with automated live API feeds.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Multi-Branch Retailers</div>
-        <div class="feat-desc">Consolidate inventory data from multiple store locations into one central system. Each branch has its own API segment, unified under one key.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Data Analytics Firms</div>
-        <div class="feat-desc">Access aggregated sales feeds and performance metrics for business intelligence, forecasting, and market analysis across SME sectors.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Mobile App Developers</div>
-        <div class="feat-desc">Build customer-facing apps, delivery tracking systems, or inventory management tools powered by our reliable, low-latency API.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── FEATURES ── -->
-<div class="section" id="features" style="padding-top:0">
-  <div class="wrap reveal">
-    <div class="section-label">Platform Features</div>
-    <div class="section-title">Everything you need.<br/>Nothing you don't.</div>
-    <div class="features-grid">
-      <div class="feat-card">
-        <div class="feat-title">Real-Time Product Catalog</div>
-        <div class="feat-desc">Get live product data with prices, stock levels, images, sizes, capacities, and variations — structured and ready to consume.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Intelligent Acquisition Engine</div>
-        <div class="feat-desc">Unregistered barcodes automatically trigger smart acquisition recommendations — the system learns and grows with your business.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">JWT + RBAC Security</div>
-        <div class="feat-desc">Role-based access control for internal staff, plus API key authentication for B2B consumers. Zero-trust architecture.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Multi-Business Support</div>
-        <div class="feat-desc">Hardware, Pharmacy, Grocery, Boutique — filter the catalog by business segment. One API, multiple industry verticals.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Sales Analytics Feed</div>
-        <div class="feat-desc">Access aggregated transaction data, revenue totals, and average order values for business intelligence and reporting.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">DPA 2012 Compliance</div>
-        <div class="feat-desc">All data access is logged, rate-limited, and protected under the Data Privacy Act of 2012 standards for Philippine businesses.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── PRICING ── -->
-<div class="section" id="pricing">
-  <div class="wrap reveal">
-    <div class="section-label" style="text-align:center">Pricing</div>
-    <div class="section-title" style="text-align:center">Simple, transparent pricing.<br/>Scale as you grow.</div>
-    <p style="color:var(--ts);text-align:center;margin-top:10px;font-size:.9rem">All plans include your API key, documentation access, and DPA compliance. No hidden fees.</p>
-    <div class="pricing-grid">
-
-      <!-- FREE -->
-      <div class="price-card">
-        <div class="price-plan">Starter</div>
-        <div class="price-amount"><sup>₱</sup>0<span>/mo</span></div>
-        <div class="price-desc">Perfect for developers exploring the API, students, or businesses doing a proof-of-concept integration.</div>
-        <div class="price-divider"></div>
-        <ul class="price-feats">
-          <li>1 API Key (shared access)</li>
-          <li>50 requests per day</li>
-          <li>Product Catalog endpoint</li>
-          <li>Barcode Lookup endpoint</li>
-          <li class="no">Sales Analytics Feed</li>
-          <li class="no">Priority Support</li>
-          <li class="no">Custom Business Segment</li>
-          <li class="no">SLA Guarantee</li>
-        </ul>
-        <a href="javascript:void(0)" onclick="openModal('starter')" class="btn btn-outline" style="width:100%;justify-content:center">Try Free →</a>
-      </div>
-
-      <!-- PROFESSIONAL -->
-      <div class="price-card popular">
-        <div class="popular-badge">Popular</div>
-        <div class="price-plan">Professional</div>
-        <div class="price-amount"><sup>₱</sup>1,499<span>/mo</span></div>
-        <div class="price-desc">For active businesses — suppliers, distributors, and e-commerce platforms that need reliable, fast data integration.</div>
-        <div class="price-divider"></div>
-        <ul class="price-feats">
-          <li>1 Dedicated API Key</li>
-          <li>5,000 requests per day</li>
-          <li>Full Product Catalog + Barcode Lookup</li>
-          <li>Sales Analytics Feed</li>
-          <li>All Business Segments</li>
-          <li>Email + Chat Support</li>
-          <li class="no">Custom Endpoints</li>
-          <li class="no">99.9% SLA Guarantee</li>
-        </ul>
-        <a href="javascript:void(0)" onclick="openModal('professional')" class="btn btn-primary" style="width:100%;justify-content:center">Subscribe Now →</a>
-      </div>
-
-      <!-- ENTERPRISE -->
-      <div class="price-card">
-        <div class="price-plan">Enterprise</div>
-        <div class="price-amount" style="font-size:2rem">Custom</div>
-        <div class="price-desc">For large-scale integrations, ERP systems, and businesses needing dedicated infrastructure and custom data endpoints.</div>
-        <div class="price-divider"></div>
-        <ul class="price-feats">
-          <li>Multiple API Keys</li>
-          <li>Unlimited requests</li>
-          <li>All endpoints + Custom routes</li>
-          <li>Priority dedicated support</li>
-          <li>Custom Business Segments</li>
-          <li>99.9% SLA Guarantee</li>
-          <li>On-premise deployment option</li>
-          <li>NDA + Custom data agreement</li>
-        </ul>
-        <a href="javascript:void(0)" onclick="openModal('enterprise')" class="btn btn-outline" style="width:100%;justify-content:center">Contact Sales →</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── API REFERENCE ── -->
-<div class="section" id="docs" style="padding-top:0">
-  <div class="wrap reveal">
-    <div class="section-label">API Reference</div>
-    <div class="section-title">Integration examples<br/>in your language</div>
-    <div class="integration-panel">
-      <div class="int-header">
-        <span class="int-title">DaaS Endpoints — B2B Access Layer</span>
-        <span class="int-sub">Base URL: <code style="font-family:'JetBrains Mono',monospace;color:var(--a3)">https://inventaapi.ph</code></span>
-      </div>
-      <div class="int-tabs">
-        <div class="int-tab active" onclick="switchIntTab('catalog')">GET /daas/catalog</div>
-        <div class="int-tab" onclick="switchIntTab('sales')">GET /daas/sales-feed</div>
-        <div class="int-tab" onclick="switchIntTab('barcode')">GET /products/barcode</div>
-        <div class="int-tab" onclick="switchIntTab('auth')">POST /auth/login</div>
-      </div>
-      <div class="int-body">
-        <div id="int-catalog" class="int-pane active">
-<span class="c-cm"># GET /daas/catalog — Fetch live product catalog</span>
-<span class="c-cm"># Auth: x-api-key header (from your subscription dashboard)</span>
-<span class="c-cm"># Filter: ?businessType=hardware | pharmacy | grocery | boutique</span>
-
-<span class="c-kw">GET</span> <span class="c-url">https://inventaapi.ph/daas/catalog?businessType=hardware</span>
-<span class="c-ky">x-api-key:</span> <span class="c-st">your_api_key_here</span>
-
-<span class="c-cm">─── RESPONSE 200 OK ─────────────────────────</span>
-{
-  <span class="c-ky">"meta"</span>: { <span class="c-ky">"count"</span>: <span class="c-nm">4</span>, <span class="c-ky">"businessSegment"</span>: <span class="c-st">"hardware"</span>, <span class="c-ky">"compliance"</span>: <span class="c-st">"DPA 2012"</span> },
-  <span class="c-ky">"catalog"</span>: [
-    {
-      <span class="c-ky">"sku"</span>: <span class="c-st">"prod_hw_1"</span>, <span class="c-ky">"barcode"</span>: <span class="c-st">"4800000000010"</span>,
-      <span class="c-ky">"name"</span>: <span class="c-st">"Deformed Steel Bar"</span>,
-      <span class="c-ky">"pricing"</span>: { <span class="c-ky">"retail"</span>: <span class="c-nm">245.00</span>, <span class="c-ky">"currency"</span>: <span class="c-st">"PHP"</span> },
-      <span class="c-ky">"inventory"</span>: { <span class="c-ky">"availableStock"</span>: <span class="c-nm">120</span>, <span class="c-ky">"status"</span>: <span class="c-ok">"IN_STOCK"</span> },
-      <span class="c-ky">"specifications"</span>: { <span class="c-ky">"size"</span>: <span class="c-st">"12mm x 6m"</span>, <span class="c-ky">"variations"</span>: { <span class="c-ky">"brand"</span>: <span class="c-st">"Pag-asa Steel"</span> } },
-      <span class="c-ky">"media"</span>: { <span class="c-ky">"thumbnailUrl"</span>: <span class="c-st">"https://..."</span> }
-    }
-  ]
-}
-
-<span class="c-cm">─── ERROR 401 Unauthorized ──────────────────</span>
-{ <span class="c-ky">"error"</span>: <span class="c-st">"Valid API key required. Subscribe at inventaapi.ph/pricing"</span> }</div>
-
-        <div id="int-sales" class="int-pane">
-<span class="c-cm"># GET /daas/sales-feed — Aggregated sales analytics</span>
-<span class="c-cm"># Requires: Professional or Enterprise plan</span>
-
-<span class="c-kw">GET</span> <span class="c-url">https://inventaapi.ph/daas/sales-feed</span>
-<span class="c-ky">x-api-key:</span> <span class="c-st">your_api_key_here</span>
-
-<span class="c-cm">─── RESPONSE 200 OK ─────────────────────────</span>
-{
-  <span class="c-ky">"meta"</span>: { <span class="c-ky">"aggregatePeriod"</span>: <span class="c-st">"all_time"</span>, <span class="c-ky">"syncTimestamp"</span>: <span class="c-st">"2026-06-01T12:00:00Z"</span> },
-  <span class="c-ky">"summary"</span>: {
-    <span class="c-ky">"totalRevenue"</span>: <span class="c-nm">48250.00</span>,
-    <span class="c-ky">"totalTransactions"</span>: <span class="c-nm">142</span>,
-    <span class="c-ky">"averageOrderValue"</span>: <span class="c-nm">339.79</span>
-  },
-  <span class="c-ky">"salesFeed"</span>: [
-    { <span class="c-ky">"transactionId"</span>: <span class="c-st">"TXN-001"</span>, <span class="c-ky">"amount"</span>: <span class="c-nm">490.00</span>, <span class="c-ky">"segment"</span>: <span class="c-st">"hardware"</span> }
-  ]
-}</div>
-
-        <div id="int-barcode" class="int-pane">
-<span class="c-cm"># GET /api/products/barcode/:barcode</span>
-<span class="c-cm"># Smart lookup — if not found, triggers intelligent acquisition engine</span>
-
-<span class="c-kw">GET</span> <span class="c-url">https://inventaapi.ph/api/products/barcode/4800000000010</span>
-
-<span class="c-cm">─── RESPONSE Found ──────────────────────────</span>
-{ <span class="c-ky">"product"</span>: { <span class="c-ky">"name"</span>: <span class="c-st">"Deformed Steel Bar"</span>, <span class="c-ky">"price"</span>: <span class="c-nm">245</span>, ... } }
-
-<span class="c-cm">─── RESPONSE Not Found — Smart Suggestion ───</span>
-{
-  <span class="c-ky">"error"</span>: <span class="c-st">"Product not registered."</span>,
-  <span class="c-ky">"suggestAcquisition"</span>: <span class="c-kw">true</span>,
-  <span class="c-ky">"message"</span>: <span class="c-st">"DaaS engine recommends adding this item to inventory..."</span>
-}</div>
-
-        <div id="int-auth" class="int-pane">
-<span class="c-cm"># POST /api/auth/login — For internal staff (POS / Admin dashboard)</span>
-<span class="c-cm"># B2B clients do NOT use this — they use x-api-key instead</span>
-
-<span class="c-kw">POST</span> <span class="c-url">https://inventaapi.ph/api/auth/login</span>
-<span class="c-ky">Content-Type:</span> application/json
-
-{ <span class="c-ky">"username"</span>: <span class="c-st">"admin"</span>, <span class="c-ky">"password"</span>: <span class="c-st">"admin123"</span> }
-
-<span class="c-cm">─── RESPONSE ────────────────────────────────</span>
-{
-  <span class="c-ky">"message"</span>: <span class="c-st">"Authentication successful."</span>,
-  <span class="c-ky">"token"</span>: <span class="c-st">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span>,
-  <span class="c-ky">"user"</span>: { <span class="c-ky">"role"</span>: <span class="c-st">"admin"</span>, <span class="c-ky">"name"</span>: <span class="c-st">"Lead System Administrator"</span> }
-}</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── SECURITY ── -->
-<div class="section" style="padding-top:0">
-  <div class="wrap reveal">
-    <div class="section-label">Security</div>
-    <div class="section-title">Enterprise-grade protection<br/>on every request</div>
-    <div class="security-row">
-      <div class="sec-card"><div class="sec-name">Helmet.js</div><div class="sec-desc">Blocks XSS, clickjacking, and MIME-sniffing via secure HTTP headers</div></div>
-      <div class="sec-card"><div class="sec-name">JWT + RBAC</div><div class="sec-desc">Role-based tokens for Admin & Cashier — scoped permissions per route</div></div>
-      <div class="sec-card"><div class="sec-name">API Key Auth</div><div class="sec-desc">Unique keys per subscriber — revocable anytime from the dashboard</div></div>
-      <div class="sec-card"><div class="sec-name">Rate Limiting</div><div class="sec-desc">150 requests/15min per IP — blocks DoS and brute-force attacks</div></div>
-      <div class="sec-card"><div class="sec-name">Audit Logs</div><div class="sec-desc">Every request timestamped with method, route, and IP address</div></div>
-      <div class="sec-card"><div class="sec-name">DPA 2012</div><div class="sec-desc">Compliant with Philippine Data Privacy Act of 2012 standards</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ── LIVE TEST ── -->
-<div class="section" id="live-test" style="padding-top:0">
-  <div class="wrap reveal">
-    <div class="section-label">Live Demo</div>
-    <div class="section-title">Test the API right now</div>
-    <div class="tester">
-      <div class="tester-top">
-        <span class="tester-title"><span class="live-dot"></span> Live API Console — No signup needed</span>
-        <span id="t-stat" class="t-status">Ready</span>
-      </div>
-      <div class="tester-body">
-        <div>
-          <div class="t-label">Select Endpoint</div>
-          <select class="t-select" id="t-preset" onchange="loadPreset()">
-            <option value="health">GET /daas/health — Health Check</option>
-            <option value="products-all">GET /api/products — All Products</option>
-            <option value="products-hw">GET /api/products?businessType=hardware</option>
-            <option value="products-ph">GET /api/products?businessType=pharmacy</option>
-            <option value="products-gr">GET /api/products?businessType=grocery</option>
-            <option value="barcode-ok">GET /api/products/barcode/4800000000010 (Found)</option>
-            <option value="barcode-miss">GET /api/products/barcode/9999999999999 (Not Found → Smart Reco)</option>
-            <option value="daas-catalog">GET /daas/catalog — B2B Product Feed</option>
-            <option value="daas-sales">GET /daas/sales-feed — B2B Sales Analytics</option>
-            <option value="login">POST /api/auth/login — Get JWT Token</option>
-          </select>
-          <div id="t-key-container" style="display: none; margin-top: 16px;">
-            <div class="t-label">x-api-key Header</div>
-            <input type="text" class="t-input" id="t-api-key" placeholder="Enter API Key"/>
-          </div>
-          <div class="t-label" style="margin-top:16px">Request URL</div>
-          <input type="text" class="t-input" id="t-url" value="" readonly/>
-          <button class="btn btn-primary t-btn" onclick="runTest()" id="t-run">Send Request</button>
-        </div>
-        <div>
-          <div class="t-label">Response</div>
-          <div id="t-result" class="t-result">// Click "Send Request" to test the API live...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── CTA ── -->
-<div class="wrap reveal">
-  <div class="cta-banner">
-    <h2>Ready to connect your business<br/>to live SME data?</h2>
-    <p>Join the growing network of businesses using InventaAPI to power their systems with real-time Philippine SME inventory data.</p>
-    <div class="cta-actions">
-      <a href="javascript:void(0)" onclick="openModal('professional')" class="btn btn-primary btn-lg">Get Your API Key</a>
-      <a href="javascript:void(0)" onclick="openModal('enterprise')" class="btn btn-outline btn-lg">Contact Sales</a>
-    </div>
-    <p style="margin-top:20px;color:var(--tm);font-size:.8rem">Starting at ₱0/month · Cancel anytime · DPA 2012 Compliant</p>
-  </div>
-</div>
-
-<!-- ── FOOTER ── -->
-<footer>
+  <!-- ── HERO ── -->
   <div class="wrap">
-    <div style="margin-bottom: 16px;">
-      <img src="logo_tight.png" alt="InventaAPI Logo" class="brand-logo" style="display: inline-block;" />
-    </div>
-    <p>API-Based Data-as-a-Service Platform for Philippine SMEs</p>
-    <p style="margin-top:8px">Powered by <strong>Node.js + Express</strong> · Secured by <strong>JWT + Helmet + RBAC</strong> · Compliant with <strong>Data Privacy Act of 2012</strong></p>
-    <p style="margin-top:8px;color:var(--tm)">© 2026 InventaAPI · Mobile Computing Research · All DaaS access is logged and monitored.</p>
-  </div>
-</footer>
-
-<!-- ── SUBSCRIPTION MODAL ── -->
-<div id="sub-modal" class="modal-overlay" style="display:none;" onclick="handleOverlayClick(event)">
-  <div class="modal-content" style="max-width:520px;">
-    <!-- Step Indicator -->
-    <div id="m-steps" class="modal-steps">
-      <div class="m-step active" id="mstep-1">1</div>
-      <div class="m-step-line"></div>
-      <div class="m-step" id="mstep-2">2</div>
-      <div class="m-step-line"></div>
-      <div class="m-step" id="mstep-3">3</div>
-    </div>
-
-    <div class="modal-header" style="border-top:1px solid var(--borderl);">
-      <span class="modal-title" id="m-header-title">Subscribe to InventaAPI</span>
-      <span class="modal-close" onclick="closeModal()">&times;</span>
-    </div>
-
-    <div class="modal-body">
-
-      <!-- ═══ STEP 1: Plan & Details ═══ -->
-      <div id="m-step-1">
-        <div class="m-plan-summary" id="m-plan-box">
-          <div class="m-plan-name" id="m-plan-display">Professional Plan</div>
-          <div class="m-plan-price" id="m-plan-price-display">₱1,499<span>/month</span></div>
-          <div class="m-plan-quota" id="m-plan-quota-display">5,000 requests/day · All endpoints</div>
-        </div>
-
-        <div class="form-group" style="margin-top:20px;">
-          <label class="modal-label">Email Address</label>
-          <input type="email" class="modal-input" id="m-email" placeholder="partner@yourbusiness.com" required/>
-        </div>
-
-        <div class="form-group">
-          <label class="modal-label">Full Name / Business Name</label>
-          <input type="text" class="modal-input" id="m-name" placeholder="Juan dela Cruz / ABC Trading Corp."/>
-        </div>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="modal-label">Subscription Plan</label>
-            <select class="modal-select" id="m-plan" onchange="updatePlanDisplay()">
-              <option value="starter">Starter — ₱0/mo · Free</option>
-              <option value="professional" selected>Professional — ₱1,499/mo</option>
-              <option value="enterprise">Enterprise — Custom</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="modal-label">Business Segment</label>
-            <select class="modal-select" id="m-segment">
-              <option value="hardware">Hardware Store</option>
-              <option value="pharmacy">Pharmacy / Drugstore</option>
-              <option value="grocery">Grocery / SME Retail</option>
-              <option value="boutique">Clothing Boutique / Retail</option>
-            </select>
-          </div>
-        </div>
-
-        <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-top:8px;" onclick="goToStep2()">
-          Continue to Payment →
-        </button>
-        <p style="text-align:center;font-size:0.72rem;color:var(--tm);margin-top:12px;">🔒 Secured by 256-bit SSL · DPA 2012 Compliant</p>
+    <div class="hero reveal">
+      <div class="badge">
+        <div class="badge-dot"></div>
+        Built for Philippine SMEs · DaaS Platform
       </div>
-
-      <!-- ═══ STEP 2: Payment Method ═══ -->
-      <div id="m-step-2" style="display:none;">
-        <p style="font-size:0.82rem;color:var(--ts);margin-bottom:20px;">Choose your preferred payment method for your <strong id="m-pay-plan-label" style="color:var(--text);">Professional</strong> subscription.</p>
-
-        <div class="pay-methods">
-          <div class="pay-method active" id="pm-gcash" onclick="selectPayMethod('gcash')">
-            <div class="pay-method-icon" style="background:linear-gradient(135deg,#0062ff,#00d1ff);">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" fill="white" opacity="0.2"/>
-                <text x="12" y="16" text-anchor="middle" fill="white" font-size="9" font-weight="800">G</text>
-              </svg>
-            </div>
-            <div class="pay-method-info">
-              <div class="pay-method-name">GCash</div>
-              <div class="pay-method-sub">Pay via GCash e-wallet</div>
-            </div>
-            <div class="pay-check" id="check-gcash">✓</div>
-          </div>
-
-          <div class="pay-method" id="pm-maya" onclick="selectPayMethod('maya')">
-            <div class="pay-method-icon" style="background:linear-gradient(135deg,#00c851,#007a33);">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" fill="white" opacity="0.2"/>
-                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="800">M</text>
-              </svg>
-            </div>
-            <div class="pay-method-info">
-              <div class="pay-method-name">Maya</div>
-              <div class="pay-method-sub">Pay via Maya / PayMaya</div>
-            </div>
-            <div class="pay-check" id="check-maya"></div>
-          </div>
-
-          <div class="pay-method" id="pm-card" onclick="selectPayMethod('card')">
-            <div class="pay-method-icon" style="background:linear-gradient(135deg,#1a1a2e,#4a4a8a);">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                <rect x="2" y="5" width="20" height="14" rx="2"/>
-                <line x1="2" y1="10" x2="22" y2="10"/>
-                <line x1="6" y1="15" x2="10" y2="15"/>
-              </svg>
-            </div>
-            <div class="pay-method-info">
-              <div class="pay-method-name">Credit / Debit Card</div>
-              <div class="pay-method-sub">Visa, Mastercard, JCB</div>
-            </div>
-            <div class="pay-check" id="check-card"></div>
-          </div>
-
-          <div class="pay-method" id="pm-bank" onclick="selectPayMethod('bank')">
-            <div class="pay-method-icon" style="background:linear-gradient(135deg,#b8860b,#ffd700);">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M16 10v11M12 10v11"/>
-              </svg>
-            </div>
-            <div class="pay-method-info">
-              <div class="pay-method-name">Bank Transfer</div>
-              <div class="pay-method-sub">BDO, BPI, UnionBank, PNB</div>
-            </div>
-            <div class="pay-check" id="check-bank"></div>
-          </div>
-        </div>
-
-        <div style="display:flex;gap:10px;margin-top:24px;">
-          <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="goToStep(1)">← Back</button>
-          <button class="btn btn-primary" style="flex:2;justify-content:center;" onclick="goToStep3()">Continue →</button>
-        </div>
-      </div>
-
-      <!-- ═══ STEP 3: Payment Details ═══ -->
-      <div id="m-step-3" style="display:none;">
-
-        <!-- GCash / Maya Details -->
-        <div id="pay-detail-ewallet">
-          <div class="pay-qr-box">
-            <div class="pay-qr-placeholder" id="pay-qr-img">
-              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                <!-- Fake QR -->
-                <rect x="5" y="5" width="30" height="30" rx="2" fill="#6366f1" opacity="0.8"/>
-                <rect x="10" y="10" width="20" height="20" rx="1" fill="white" opacity="0.9"/>
-                <rect x="13" y="13" width="14" height="14" fill="#6366f1"/>
-                <rect x="45" y="5" width="30" height="30" rx="2" fill="#6366f1" opacity="0.8"/>
-                <rect x="50" y="10" width="20" height="20" rx="1" fill="white" opacity="0.9"/>
-                <rect x="53" y="13" width="14" height="14" fill="#6366f1"/>
-                <rect x="5" y="45" width="30" height="30" rx="2" fill="#6366f1" opacity="0.8"/>
-                <rect x="10" y="50" width="20" height="20" rx="1" fill="white" opacity="0.9"/>
-                <rect x="13" y="53" width="14" height="14" fill="#6366f1"/>
-                <rect x="45" y="45" width="8" height="8" fill="#6366f1" opacity="0.8"/>
-                <rect x="57" y="45" width="8" height="8" fill="#6366f1" opacity="0.8"/>
-                <rect x="45" y="57" width="8" height="8" fill="#6366f1" opacity="0.8"/>
-                <rect x="57" y="57" width="8" height="8" fill="#6366f1" opacity="0.8"/>
-                <rect x="69" y="45" width="6" height="6" fill="#818cf8" opacity="0.8"/>
-                <rect x="69" y="55" width="6" height="6" fill="#818cf8" opacity="0.8"/>
-                <rect x="45" y="67" width="8" height="8" fill="#818cf8" opacity="0.8"/>
-                <rect x="57" y="67" width="6" height="6" fill="#6366f1" opacity="0.8"/>
-                <rect x="67" y="67" width="8" height="8" fill="#818cf8" opacity="0.8"/>
-              </svg>
-            </div>
-            <div class="pay-qr-label" id="pay-qr-label">Scan with GCash app</div>
-          </div>
-          <p style="text-align:center;font-size:0.78rem;color:var(--ts);margin:12px 0;">— or send to this number —</p>
-          <div style="text-align:center;">
-            <div style="font-size:1.4rem;font-weight:900;font-family:'JetBrains Mono',monospace;color:var(--text);letter-spacing:.1em;">0917 123 4567</div>
-            <div style="font-size:0.72rem;color:var(--ts);margin-top:4px;">Account Name: <strong style="color:var(--text);">InventaAPI Inc.</strong></div>
-          </div>
-          <div class="pay-amount-box">
-            <div style="font-size:0.72rem;color:var(--ts);">Amount to Send</div>
-            <div style="font-size:1.6rem;font-weight:900;color:var(--text);" id="ewallet-amount">₱1,499.00</div>
-          </div>
-          <div class="form-group" style="margin-top:16px;">
-            <label class="modal-label">Reference / Transaction Number</label>
-            <input type="text" class="modal-input" id="m-ewallet-ref" placeholder="e.g. 202606011234567" style="font-family:'JetBrains Mono',monospace;"/>
-            <small style="color:var(--tm);font-size:0.7rem;margin-top:4px;display:block;">Found in your GCash/Maya app after sending payment.</small>
-          </div>
-        </div>
-
-        <!-- Card Details -->
-        <div id="pay-detail-card" style="display:none;">
-          <div class="card-preview" id="card-preview-box">
-            <div class="card-chip"></div>
-            <div class="card-number" id="card-preview-num">•••• •••• •••• ••••</div>
-            <div class="card-info-row">
-              <div><div class="card-label">Card Holder</div><div class="card-val" id="card-preview-name">YOUR NAME</div></div>
-              <div><div class="card-label">Expires</div><div class="card-val" id="card-preview-exp">MM/YY</div></div>
-            </div>
-          </div>
-          <div class="form-group" style="margin-top:16px;">
-            <label class="modal-label">Card Number</label>
-            <input type="text" class="modal-input" id="m-card-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNum(this)" style="font-family:'JetBrains Mono',monospace;letter-spacing:.1em;"/>
-          </div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="modal-label">Name on Card</label>
-              <input type="text" class="modal-input" id="m-card-name" placeholder="Juan dela Cruz" oninput="document.getElementById('card-preview-name').textContent=this.value.toUpperCase()||'YOUR NAME'"/>
-            </div>
-            <div class="form-group">
-              <label class="modal-label">Expiry Date</label>
-              <input type="text" class="modal-input" id="m-card-exp" placeholder="MM / YY" maxlength="7" oninput="formatCardExp(this)" style="font-family:'JetBrains Mono',monospace;"/>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="modal-label">CVV / CVC</label>
-            <input type="password" class="modal-input" id="m-card-cvv" placeholder="•••" maxlength="4" style="width:100px;font-family:'JetBrains Mono',monospace;letter-spacing:.2em;"/>
-          </div>
-          <div style="font-size:0.72rem;color:var(--tm);display:flex;align-items:center;gap:6px;margin-top:4px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Your card details are encrypted and never stored on our servers.
-          </div>
-        </div>
-
-        <!-- Bank Transfer Details -->
-        <div id="pay-detail-bank" style="display:none;">
-          <p style="font-size:0.82rem;color:var(--ts);margin-bottom:16px;">Transfer to any of these accounts. Use your <strong style="color:var(--accent2);">email address</strong> as the payment reference.</p>
-          <div class="bank-list">
-            <div class="bank-item">
-              <div class="bank-logo bdo">BDO</div>
-              <div class="bank-details">
-                <div class="bank-acct-name">InventaAPI Inc.</div>
-                <div class="bank-acct-num">00123-456-7890</div>
-              </div>
-            </div>
-            <div class="bank-item">
-              <div class="bank-logo bpi">BPI</div>
-              <div class="bank-details">
-                <div class="bank-acct-name">InventaAPI Inc.</div>
-                <div class="bank-acct-num">9876-5432-10</div>
-              </div>
-            </div>
-            <div class="bank-item">
-              <div class="bank-logo ubp" style="background:linear-gradient(135deg,#e85d04,#f48c06);">UBP</div>
-              <div class="bank-details">
-                <div class="bank-acct-name">InventaAPI Inc.</div>
-                <div class="bank-acct-num">001234567890</div>
-              </div>
-            </div>
-          </div>
-          <div class="pay-amount-box">
-            <div style="font-size:0.72rem;color:var(--ts);">Amount to Transfer</div>
-            <div style="font-size:1.6rem;font-weight:900;color:var(--text);" id="bank-amount">₱1,499.00</div>
-          </div>
-          <div class="form-group" style="margin-top:16px;">
-            <label class="modal-label">Bank Reference / Confirmation Number</label>
-            <input type="text" class="modal-input" id="m-bank-ref" placeholder="e.g. BDO20260601000123" style="font-family:'JetBrains Mono',monospace;"/>
-          </div>
-        </div>
-
-        <div style="display:flex;gap:10px;margin-top:24px;">
-          <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="goToStep(2)">← Back</button>
-          <button class="btn btn-primary" style="flex:2;justify-content:center;" onclick="processPayment()">Confirm Payment ✓</button>
-        </div>
-        <p style="text-align:center;font-size:0.7rem;color:var(--tm);margin-top:10px;">By confirming, you agree to InventaAPI's Terms of Service and B2B Data Access Agreement.</p>
-      </div>
-
-      <!-- ═══ STEP 4: Processing ═══ -->
-      <div id="m-step-4" style="display:none;text-align:center;padding:40px 0;">
-        <div class="processing-spinner"></div>
-        <div style="font-size:1rem;font-weight:700;color:var(--text);margin-top:24px;">Verifying Payment...</div>
-        <div style="font-size:0.8rem;color:var(--ts);margin-top:8px;">Registering your B2B subscription and generating API key.</div>
-        <div style="font-size:0.72rem;color:var(--tm);margin-top:16px;">This may take a few seconds.</div>
-      </div>
-
-      <!-- ═══ STEP 5: Success / API Key ═══ -->
-      <div id="m-step-5" style="display:none;text-align:center;">
-        <div class="success-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
-            <path d="M20 6L9 17l-5-5"/>
+      <h1>
+        <span class="grad">Stop searching for product data.</span><br />
+        <span class="grad2">We've already built it.</span>
+      </h1>
+      <p class="hero-sub">
+        InventaAPI gives your business or app instant access to a <strong>centralized product catalog</strong> —
+        barcodes, names, prices, images, sizes, variations, and more. One API key. Zero manual encoding.
+      </p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn btn-primary btn-lg" id="hero-subscribe-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
-        </div>
-        <div style="font-size:1.1rem;font-weight:800;color:var(--text);margin-top:16px;">Payment Verified!</div>
-        <div style="font-size:0.82rem;color:var(--ts);margin-top:6px;">Your B2B API Key has been activated. Keep it safe — it's your access credential.</div>
-
-        <div class="key-display">
-          <div style="font-size:0.65rem;font-weight:800;color:var(--green);letter-spacing:.08em;margin-bottom:8px;">YOUR API KEY</div>
-          <input type="text" class="t-input" id="m-api-key" readonly style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;background:var(--bg);color:#86efac;text-align:center;width:100%;"/>
-          <button class="btn btn-ghost" onclick="copyModalKey()" id="m-copy-btn" style="width:100%;justify-content:center;margin-top:10px;">📋 Copy API Key</button>
-        </div>
-
-        <div class="key-plan-badge" id="m-key-plan-badge">Professional Plan · 5,000 req/day</div>
-
-        <div style="display:flex;gap:10px;margin-top:16px;">
-          <button class="btn btn-primary" style="flex:1;justify-content:center;font-size:0.85rem;" onclick="testKeyInConsole()">🚀 Test in Live Console →</button>
-        </div>
-        <p style="font-size:0.72rem;color:var(--tm);margin-top:12px;">A confirmation email will be sent to your registered address within 24 hours.</p>
+          Get Started
+        </a>
       </div>
-
     </div>
   </div>
-</div>
 
-<script>
-  // Tab switcher for code preview
-  function switchTab(id) {
-    document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.code-pane').forEach(p => p.classList.remove('active'));
-    document.querySelector(`.code-tab[onclick="switchTab('${id}')"]`).classList.add('active');
-    document.getElementById('tab-' + id).classList.add('active');
-  }
+  <!-- ── HOW IT WORKS ── -->
+  <div class="section" id="how-it-works">
+    <div class="wrap reveal">
+      <div class="centered">
+        <div class="section-label">How It Works</div>
+        <div class="section-title">From signup to live data<br />in under 5 minutes</div>
+        <div class="section-sub">No complex setup. No database copies. No manual encoding. Subscribe, get your key, and
+          integrate.</div>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-title">Choose a Plan</div>
+          <div class="step-body">Pick the subscription tier that fits your business — Free Starter, Professional, or
+            Enterprise. Pay via GCash, Maya, or bank transfer.</div>
+          <span class="step-tag tag-green">Subscription</span>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-title">Receive Your API Key</div>
+          <div class="step-body">After subscribing, you instantly receive your unique <code
+              style="color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:.85em">x-api-key</code>. This is
+            your access credential — keep it safe.</div>
+          <span class="step-tag tag-blue">Authentication</span>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-title">Add It to Your App</div>
+          <div class="step-body">Add the API key as a request header. Works with Python, JavaScript, PHP, Java, or any
+            language. No SDK needed — just plain HTTP.</div>
+          <span class="step-tag tag-cyan">Integration</span>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-title">Access Product Data</div>
+          <div class="step-body">Your app now pulls real-time product names, barcodes, descriptions, images, prices,
+            sizes, and variations directly from our API.</div>
+          <span class="step-tag tag-purple">Live Data</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  // Tab switcher for integration panel
-  function switchIntTab(id) {
-    document.querySelectorAll('.int-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.int-pane').forEach(p => p.classList.remove('active'));
-    document.querySelector(`.int-tab[onclick="switchIntTab('${id}')"]`).classList.add('active');
-    document.getElementById('int-' + id).classList.add('active');
-  }
+  <!-- ── WHO USES IT ── -->
+  <div class="section" id="who-uses" style="padding-top: 0">
+    <div class="wrap reveal">
+      <div class="section-label">Use Cases</div>
+      <div class="section-title">Who uses InventaAPI?</div>
+      <div class="section-sub">Any business or developer that needs accurate, ready-to-use product information.</div>
+      <div class="use-grid">
+        <div class="use-card">
+          <span class="use-icon">🏗️</span>
+          <div class="use-title">Inventory System Developers</div>
+          <div class="use-body">Build inventory apps without manually encoding product data. Scan a barcode → product
+            info is pulled automatically from our catalog.</div>
+        </div>
+        <div class="use-card">
+          <span class="use-icon">🛒</span>
+          <div class="use-title">E-commerce Platforms</div>
+          <div class="use-body">Sync product names, prices, and images directly from the API. Your online store always
+            shows accurate data without manual catalog updates.</div>
+        </div>
+        <div class="use-card">
+          <span class="use-icon">🏭</span>
+          <div class="use-title">Suppliers & Distributors</div>
+          <div class="use-body">Monitor client inventory in real-time. Know when stock is low so you can proactively
+            send replenishment — no waiting for purchase orders.</div>
+        </div>
+        <div class="use-card">
+          <span class="use-icon">📊</span>
+          <div class="use-title">ERP & Business Systems</div>
+          <div class="use-body">Connect SAP, Oracle, or any custom ERP to pull structured product data. Replace slow CSV
+            exports with automated live API feeds.</div>
+        </div>
+        <div class="use-card">
+          <span class="use-icon">📱</span>
+          <div class="use-title">Mobile App Developers</div>
+          <div class="use-body">Build customer-facing apps, delivery trackers, or POS systems powered by our reliable,
+            low-latency product catalog API.</div>
+        </div>
+        <div class="use-card">
+          <span class="use-icon">🔬</span>
+          <div class="use-title">Data & Analytics Firms</div>
+          <div class="use-body">Access aggregated product data and sales feeds for business intelligence, price
+            monitoring, and market analysis across SME sectors.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  // Live tester configurations
-  const API_KEY = 'daas_sme_secure_integration_key_5599aae';
-  const presets = {
-    'health':       { url: '/daas/health', method: 'GET', headers: {} },
-    'products-all': { url: '/api/products', method: 'GET', headers: {} },
-    'products-hw':  { url: '/api/products?businessType=hardware', method: 'GET', headers: {} },
-    'products-ph':  { url: '/api/products?businessType=pharmacy', method: 'GET', headers: {} },
-    'products-gr':  { url: '/api/products?businessType=grocery', method: 'GET', headers: {} },
-    'barcode-ok':   { url: '/api/products/barcode/4800000000010', method: 'GET', headers: {} },
-    'barcode-miss': { url: '/api/products/barcode/9999999999999', method: 'GET', headers: {} },
-    'daas-catalog': { url: '/daas/catalog', method: 'GET', headers: {} },
-    'daas-sales':   { url: '/daas/sales-feed', method: 'GET', headers: {} },
-    'login':        { url: '/api/auth/login', method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: 'admin', password: 'admin123' }) }
-  };
+  <!-- ── FEATURES ── -->
+  <div class="section" id="features" style="padding-top: 0">
+    <div class="wrap reveal">
+      <div class="section-label">Platform Features</div>
+      <div class="section-title">Everything you need.<br />Nothing you don't.</div>
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+            </svg>
+          </div>
+          <div class="feat-title">Centralized Product Catalog</div>
+          <div class="feat-body">Over 36 products across Hardware and Grocery with names, barcodes, descriptions,
+            images, prices, sizes, capacities, and variations — all in one place.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+          </div>
+          <div class="feat-title">Intelligent Product Recommendation</div>
+          <div class="feat-body">Automatically suggests related products based on category, business type, and buying
+            patterns — helping developers build smarter inventory apps.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div class="feat-title">Secure API Key Auth</div>
+          <div class="feat-body">Every subscriber receives a unique API key. Keys are scoped to your plan tier and can
+            be revoked at any time. Combined with rate limiting to prevent abuse.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
+          </div>
+          <div class="feat-title">Multi-Business Support</div>
+          <div class="feat-body">Filter the catalog by business segment: Hardware, Grocery, Pharmacy, and more. One API,
+            multiple industry verticals. Perfect for multi-tenant systems.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+          </div>
+          <div class="feat-title">Sales Analytics Feed</div>
+          <div class="feat-body">Professional and Enterprise subscribers can access aggregated transaction data, revenue
+            totals, and average order values for business intelligence.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+          </div>
+          <div class="feat-title">DPA 2012 Compliant</div>
+          <div class="feat-body">All data access is logged, rate-limited, and protected under the Data Privacy Act of
+            2012 standards for Philippine businesses and developers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  function loadPreset() {
-    const key = document.getElementById('t-preset').value;
-    const p = presets[key];
-    if (p) {
-      document.getElementById('t-url').value = window.location.origin + p.url;
-      // Show key container for secure daas endpoints
-      const needsKey = p.url.includes('/daas/catalog') || p.url.includes('/daas/sales-feed');
-      document.getElementById('t-key-container').style.display = needsKey ? 'block' : 'none';
-      if (needsKey && !document.getElementById('t-api-key').value) {
-        document.getElementById('t-api-key').value = API_KEY;
-      }
+  <!-- ── PRICING ── -->
+  <div class="section" id="pricing">
+    <div class="wrap reveal">
+      <div class="centered">
+        <div class="section-label">Pricing</div>
+        <div class="section-title">Simple, transparent pricing.<br />Scale as you grow.</div>
+        <p style="color:var(--ts);margin-top:10px;font-size:.9rem">All plans include an API key, documentation access,
+          and DPA compliance. No hidden fees.</p>
+      </div>
+      <div class="price-grid">
+
+        <!-- STARTER -->
+        <div class="price-card">
+          <div class="price-plan">Starter</div>
+          <div class="price-amount"><sup>₱</sup>0<span class="period">/mo</span></div>
+          <div class="price-desc">For developers exploring the API, students, or teams doing a proof-of-concept
+            integration.</div>
+          <div class="price-divider"></div>
+          <ul class="price-feats">
+            <li>1 API Key (shared access)</li>
+            <li>50 requests per day</li>
+            <li>Product Catalog endpoint</li>
+            <li>Product Recommendations</li>
+            <li class="no">Sales Analytics Feed</li>
+            <li class="no">Priority Support</li>
+            <li class="no">Custom Business Segment</li>
+          </ul>
+          <a href="javascript:void(0)" onclick="openModal('starter')" class="btn btn-outline price-btn"
+            id="starter-btn">Get Started Free →</a>
+        </div>
+
+        <!-- PROFESSIONAL -->
+        <div class="price-card featured">
+          <div class="featured-badge">Most Popular</div>
+          <div class="price-plan">Professional</div>
+          <div class="price-amount"><sup>₱</sup>1,499<span class="period">/mo</span></div>
+          <div class="price-desc">For active businesses — suppliers, distributors, and e-commerce platforms needing
+            reliable, fast data integration.</div>
+          <div class="price-divider"></div>
+          <ul class="price-feats">
+            <li>1 Dedicated API Key</li>
+            <li>5,000 requests per day</li>
+            <li>Full Product Catalog + Recommendations</li>
+            <li>Sales Analytics Feed</li>
+            <li>All Business Segments</li>
+            <li>Email + Chat Support</li>
+            <li class="no">Custom Endpoints</li>
+          </ul>
+          <a href="javascript:void(0)" onclick="openModal('professional')" class="btn btn-primary price-btn"
+            id="pro-btn">Subscribe Now →</a>
+        </div>
+
+        <!-- ENTERPRISE -->
+        <div class="price-card">
+          <div class="price-plan">Enterprise</div>
+          <div class="price-amount" style="font-size:2rem">Custom</div>
+          <div class="price-desc">For large-scale ERP integrations, multi-branch businesses, and organizations needing
+            custom endpoints and dedicated infrastructure.</div>
+          <div class="price-divider"></div>
+          <ul class="price-feats">
+            <li>Multiple API Keys</li>
+            <li>Unlimited requests</li>
+            <li>All endpoints + Custom routes</li>
+            <li>Priority dedicated support</li>
+            <li>Custom Business Segments</li>
+            <li>99.9% SLA Guarantee</li>
+            <li>NDA + Custom data agreement</li>
+          </ul>
+          <a href="javascript:void(0)" onclick="openModal('enterprise')" class="btn btn-outline price-btn"
+            id="enterprise-btn">Contact Sales →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <img src="logo_tight.png" alt="InventaAPI" class="brand-logo" />
+          <p>API-Based DaaS Platform for Philippine SMEs<br />© 2026 InventaAPI · All DaaS access is logged and
+            monitored.</p>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- ──          SUBSCRIPTION MODAL          ── -->
+  <!-- ══════════════════════════════════════════ -->
+  <div id="sub-modal" class="modal-overlay" style="display:none" onclick="handleOverlayClick(event)">
+    <div class="modal-box">
+
+      <!-- Steps bar -->
+      <div id="m-steps-bar" class="m-steps-bar" style="padding:20px 24px 4px">
+        <div class="ms active" id="mstep-1">1</div>
+        <div class="ms-line" id="mline-1"></div>
+        <div class="ms" id="mstep-2">2</div>
+        <div class="ms-line" id="mline-2"></div>
+        <div class="ms" id="mstep-3">3</div>
+      </div>
+
+      <!-- Header -->
+      <div class="modal-head" style="border-top:1px solid var(--borderl)">
+        <span class="modal-head-title" id="m-head-title">Subscribe to InventaAPI</span>
+        <span class="modal-close" onclick="closeModal()">×</span>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- ══ STEP 1: Details ══ -->
+        <div id="mstep-body-1">
+          <div class="plan-summary-box" id="m-plan-box">
+            <div class="plan-summary-name" id="m-plan-name">Professional Plan</div>
+            <div class="plan-summary-price" id="m-plan-price">₱1,499<span>/month</span></div>
+            <div class="plan-summary-quota" id="m-plan-quota">5,000 requests/day · All endpoints</div>
+          </div>
+          <div class="fgroup">
+            <label class="flabel">Email Address</label>
+            <input type="email" class="finput" id="m-email" placeholder="partner@yourbusiness.com" />
+          </div>
+          <div class="fgroup">
+            <label class="flabel">Full Name / Business Name</label>
+            <input type="text" class="finput" id="m-name" placeholder="Juan dela Cruz / ABC Trading Corp." />
+          </div>
+          <div class="fgrid">
+            <div class="fgroup">
+              <label class="flabel">Subscription Plan</label>
+              <select class="fselect" id="m-plan-select" onchange="updatePlanDisplay()">
+                <option value="starter">Starter — Free</option>
+                <option value="professional" selected>Professional — ₱1,499/mo</option>
+                <option value="enterprise">Enterprise — Custom</option>
+              </select>
+            </div>
+            <div class="fgroup">
+              <label class="flabel">Business Segment</label>
+              <select class="fselect" id="m-segment">
+                <option value="hardware">Hardware Store</option>
+                <option value="pharmacy">Pharmacy / Drugstore</option>
+                <option value="grocery">Grocery / SME Retail</option>
+                <option value="boutique">Clothing / Boutique</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="goToStep2()"
+            id="m-continue-btn">
+            Continue to Payment →
+          </button>
+          <p class="modal-note">🔒 Secured by 256-bit SSL · DPA 2012 Compliant</p>
+        </div>
+
+        <!-- ══ STEP 2: Payment Method ══ -->
+        <div id="mstep-body-2" style="display:none">
+          <p style="font-size:.82rem;color:var(--ts);margin-bottom:18px">Choose how you'd like to pay for your <strong
+              id="m-pay-plan-label" style="color:var(--text)">Professional</strong> subscription.</p>
+          <div class="pay-methods">
+            <div class="pay-method selected" id="pm-gcash" onclick="selectPay('gcash')">
+              <div class="pm-icon" style="background:linear-gradient(135deg,#0062ff,#00d1ff)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" font-size="10"><text x="12" y="16"
+                    text-anchor="middle" font-size="11" font-weight="800">G</text></svg>
+              </div>
+              <div class="pm-info">
+                <div class="pm-name">GCash</div>
+                <div class="pm-sub">Pay via GCash e-wallet</div>
+              </div>
+              <div class="pm-check" id="pcheck-gcash">✓</div>
+            </div>
+            <div class="pay-method" id="pm-maya" onclick="selectPay('maya')">
+              <div class="pm-icon" style="background:linear-gradient(135deg,#00c851,#007a33)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><text x="12" y="16" text-anchor="middle"
+                    font-size="11" font-weight="800">M</text></svg>
+              </div>
+              <div class="pm-info">
+                <div class="pm-name">Maya</div>
+                <div class="pm-sub">Pay via Maya / PayMaya</div>
+              </div>
+              <div class="pm-check" id="pcheck-maya"></div>
+            </div>
+            <div class="pay-method" id="pm-card" onclick="selectPay('card')">
+              <div class="pm-icon" style="background:linear-gradient(135deg,#1a1a2e,#4a4a8a)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <line x1="2" y1="10" x2="22" y2="10" />
+                </svg>
+              </div>
+              <div class="pm-info">
+                <div class="pm-name">Credit / Debit Card</div>
+                <div class="pm-sub">Visa, Mastercard, JCB</div>
+              </div>
+              <div class="pm-check" id="pcheck-card"></div>
+            </div>
+            <div class="pay-method" id="pm-bank" onclick="selectPay('bank')">
+              <div class="pm-icon" style="background:linear-gradient(135deg,#b8860b,#ffd700)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                  <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M16 10v11M12 10v11" />
+                </svg>
+              </div>
+              <div class="pm-info">
+                <div class="pm-name">Bank Transfer</div>
+                <div class="pm-sub">BDO, BPI, UnionBank</div>
+              </div>
+              <div class="pm-check" id="pcheck-bank"></div>
+            </div>
+          </div>
+          <div class="modal-btn-row">
+            <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="goToStep(1)"
+              id="m-back-2-btn">← Back</button>
+            <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="goToStep3()"
+              id="m-continue-2-btn">Continue →</button>
+          </div>
+        </div>
+
+        <!-- ══ STEP 3: Payment Details ══ -->
+        <div id="mstep-body-3" style="display:none">
+
+          <!-- E-wallet (GCash / Maya) -->
+          <div id="pd-ewallet">
+            <div class="qr-box">
+              <div class="qr-img">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                  <rect x="5" y="5" width="30" height="30" rx="2" fill="#6366f1" opacity=".8" />
+                  <rect x="10" y="10" width="20" height="20" rx="1" fill="white" opacity=".9" />
+                  <rect x="13" y="13" width="14" height="14" fill="#6366f1" />
+                  <rect x="45" y="5" width="30" height="30" rx="2" fill="#6366f1" opacity=".8" />
+                  <rect x="50" y="10" width="20" height="20" rx="1" fill="white" opacity=".9" />
+                  <rect x="53" y="13" width="14" height="14" fill="#6366f1" />
+                  <rect x="5" y="45" width="30" height="30" rx="2" fill="#6366f1" opacity=".8" />
+                  <rect x="10" y="50" width="20" height="20" rx="1" fill="white" opacity=".9" />
+                  <rect x="13" y="53" width="14" height="14" fill="#6366f1" />
+                  <rect x="45" y="45" width="8" height="8" fill="#6366f1" opacity=".8" />
+                  <rect x="57" y="45" width="8" height="8" fill="#818cf8" opacity=".8" />
+                  <rect x="45" y="57" width="8" height="8" fill="#818cf8" opacity=".8" />
+                  <rect x="57" y="57" width="8" height="8" fill="#6366f1" opacity=".8" />
+                  <rect x="69" y="45" width="6" height="6" fill="#818cf8" opacity=".8" />
+                  <rect x="45" y="69" width="8" height="8" fill="#818cf8" opacity=".8" />
+                  <rect x="67" y="67" width="8" height="8" fill="#6366f1" opacity=".8" />
+                </svg>
+              </div>
+              <div class="qr-number">0917 123 4567</div>
+              <div class="qr-name" id="qr-app-label">Scan with GCash app · or send to this number</div>
+            </div>
+            <div class="amount-box" style="margin-top:14px">
+              <div style="font-size:.72rem;color:var(--ts)">Amount to Send</div>
+              <div style="font-size:1.5rem;font-weight:900" id="ewallet-amount">₱1,499.00</div>
+            </div>
+            <div class="fgroup" style="margin-top:14px">
+              <label class="flabel">Reference / Transaction Number</label>
+              <input type="text" class="finput" id="m-ewallet-ref" placeholder="e.g. 202606011234567"
+                style="font-family:'JetBrains Mono',monospace" />
+              <small style="color:var(--tm);font-size:.68rem;margin-top:4px;display:block">Found in your GCash/Maya app
+                after sending.</small>
+            </div>
+          </div>
+
+          <!-- Card -->
+          <div id="pd-card" style="display:none">
+            <div class="card-preview">
+              <div class="card-chip"></div>
+              <div class="card-number" id="cnum-disp">•••• •••• •••• ••••</div>
+              <div class="card-info-row">
+                <div>
+                  <div class="card-lbl">Card Holder</div>
+                  <div class="card-val" id="cname-disp">YOUR NAME</div>
+                </div>
+                <div>
+                  <div class="card-lbl">Expires</div>
+                  <div class="card-val" id="cexp-disp">MM/YY</div>
+                </div>
+              </div>
+            </div>
+            <div class="fgroup">
+              <label class="flabel">Card Number</label>
+              <input type="text" class="finput" id="m-card-num" placeholder="1234 5678 9012 3456" maxlength="19"
+                oninput="fmtCardNum(this)" style="font-family:'JetBrains Mono',monospace;letter-spacing:.08em" />
+            </div>
+            <div class="fgrid">
+              <div class="fgroup">
+                <label class="flabel">Name on Card</label>
+                <input type="text" class="finput" id="m-card-name" placeholder="Juan dela Cruz"
+                  oninput="document.getElementById('cname-disp').textContent=this.value.toUpperCase()||'YOUR NAME'" />
+              </div>
+              <div class="fgroup">
+                <label class="flabel">Expiry / CVV</label>
+                <input type="text" class="finput" id="m-card-exp" placeholder="MM/YY" maxlength="5"
+                  oninput="fmtCardExp(this)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Bank Transfer -->
+          <div id="pd-bank" style="display:none">
+            <p style="font-size:.82rem;color:var(--ts);margin-bottom:14px">Transfer to any of these accounts. Use your
+              <strong style="color:var(--accent2)">email address</strong> as the payment reference.</p>
+            <div class="bank-list">
+              <div class="bank-item">
+                <div class="bank-logo" style="background:#0038a8">BDO</div>
+                <div>
+                  <div class="bank-acct-name">InventaAPI Inc.</div>
+                  <div class="bank-acct-num">00123-456-7890</div>
+                </div>
+              </div>
+              <div class="bank-item">
+                <div class="bank-logo" style="background:#d01118">BPI</div>
+                <div>
+                  <div class="bank-acct-name">InventaAPI Inc.</div>
+                  <div class="bank-acct-num">9876-5432-10</div>
+                </div>
+              </div>
+              <div class="bank-item">
+                <div class="bank-logo" style="background:linear-gradient(135deg,#e85d04,#f48c06)">UBP</div>
+                <div>
+                  <div class="bank-acct-name">InventaAPI Inc.</div>
+                  <div class="bank-acct-num">001234567890</div>
+                </div>
+              </div>
+            </div>
+            <div class="amount-box">
+              <div style="font-size:.72rem;color:var(--ts)">Amount to Transfer</div>
+              <div style="font-size:1.5rem;font-weight:900" id="bank-amount">₱1,499.00</div>
+            </div>
+            <div class="fgroup" style="margin-top:14px">
+              <label class="flabel">Bank Reference / Confirmation Number</label>
+              <input type="text" class="finput" id="m-bank-ref" placeholder="e.g. BDO20260601000123"
+                style="font-family:'JetBrains Mono',monospace" />
+            </div>
+          </div>
+
+          <div class="modal-btn-row">
+            <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="goToStep(2)"
+              id="m-back-3-btn">← Back</button>
+            <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="processPayment()"
+              id="m-confirm-btn">Confirm Payment ✓</button>
+          </div>
+          <p class="modal-note">By confirming, you agree to InventaAPI's Terms of Service and B2B Data Access Agreement.
+          </p>
+        </div>
+
+        <!-- ══ STEP 4: Processing ══ -->
+        <div id="mstep-body-4" style="display:none;text-align:center;padding:40px 0">
+          <div class="spinner"></div>
+          <div style="font-size:1rem;font-weight:700;margin-top:22px">Verifying Payment...</div>
+          <div style="font-size:.8rem;color:var(--ts);margin-top:8px">Generating your API key and activating your
+            subscription.</div>
+        </div>
+
+        <!-- ══ STEP 5: Success ══ -->
+        <div id="mstep-body-5" style="display:none;text-align:center">
+          <div class="success-circle" style="margin:0 auto">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+          <div style="font-size:1.1rem;font-weight:800;margin-top:16px">Subscription Activated!</div>
+          <div style="font-size:.82rem;color:var(--ts);margin-top:6px">Your API key is ready. Keep it safe — it's your
+            only access credential.</div>
+          <div class="key-box">
+            <div class="key-label">YOUR API KEY</div>
+            <input type="text" class="key-input" id="m-api-key" readonly />
+            <button class="btn btn-ghost" onclick="copyKey()" id="m-copy-btn"
+              style="width:100%;justify-content:center;margin-top:10px">📋 Copy API Key</button>
+          </div>
+          <div class="plan-badge" id="m-plan-badge">Professional Plan · 5,000 req/day</div>
+          <div class="modal-btn-row">
+            <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="goToDashboard()"
+              id="m-test-btn">Go to Dashboard →</button>
+          </div>
+          <p class="modal-note">A confirmation email will be sent to your registered address within 24 hours.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+
+    // ── Modal ──────────────────────────────────────────────
+    const planData = {
+      starter: { name: 'Starter', price: '₱0', priceFull: '₱0.00', quota: 'Free · 50 requests/day', period: '' },
+      professional: { name: 'Professional', price: '₱1,499', priceFull: '₱1,499.00', quota: '5,000 requests/day · All endpoints', period: '/month' },
+      enterprise: { name: 'Enterprise', price: 'Custom', priceFull: 'Custom', quota: 'Unlimited · Custom endpoints', period: '' }
+    };
+    let currentPay = 'gcash';
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('sub-modal')) closeModal();
     }
-  }
 
-  async function runTest() {
-    const key = document.getElementById('t-preset').value;
-    const p = presets[key];
-    const url = document.getElementById('t-url').value;
-    const resultEl = document.getElementById('t-result');
-    const statEl = document.getElementById('t-stat');
-    const btn = document.getElementById('t-run');
-    
-    btn.textContent = 'Sending...'; btn.disabled = true;
-    resultEl.style.color = '#94a3b8';
-    resultEl.textContent = '// Sending request...';
-    
-    const start = Date.now();
-    try {
-      const headers = {};
-      
-      // Determine if this endpoint needs a key
-      const keyContainer = document.getElementById('t-key-container');
-      if (keyContainer.style.display === 'block') {
-        const apiKeyVal = document.getElementById('t-api-key').value.trim();
-        headers['x-api-key'] = apiKeyVal;
-      }
-      
-      if (p && p.headers) {
-        Object.assign(headers, p.headers);
-      }
-      
-      const opts = { method: (p ? p.method : 'GET'), headers: headers };
-      if (p && p.body) opts.body = p.body;
-      
-      const res = await fetch(url, opts);
-      const ms = Date.now() - start;
-      const data = await res.json();
-      resultEl.style.color = res.ok ? '#86efac' : '#fca5a5';
-      resultEl.textContent = `// HTTP ${res.status} · ${ms}ms\n\n${JSON.stringify(data, null, 2)}`;
-      statEl.textContent = `${res.status} · ${ms}ms`;
-      statEl.style.color = res.ok ? '#10b981' : '#ef4444';
-    } catch(e) {
-      resultEl.style.color = '#fca5a5';
-      resultEl.textContent = `// Request failed\n// ${e.message}`;
-      statEl.textContent = 'Error'; statEl.style.color = '#ef4444';
-    } finally {
-      btn.textContent = 'Send Request'; btn.disabled = false;
-    }
-  }
-
-  // Modal helpers
-  let currentPayMethod = 'gcash';
-  const planData = {
-    starter:      { name: 'Starter',      price: '₱0',       priceFull: '₱0.00',     quota: 'Free · 50 req/day' },
-    professional: { name: 'Professional', price: '₱1,499',   priceFull: '₱1,499.00', quota: '5,000 req/day · All endpoints' },
-    enterprise:   { name: 'Enterprise',   price: 'Custom',   priceFull: 'Custom',     quota: 'Unlimited · Custom endpoints' }
-  };
-
-  function handleOverlayClick(e) {
-    if (e.target === document.getElementById('sub-modal')) closeModal();
-  }
-
-  function updatePlanDisplay() {
-    const plan = document.getElementById('m-plan').value;
-    const d = planData[plan];
-    document.getElementById('m-plan-display').textContent = d.name + ' Plan';
-    document.getElementById('m-plan-price-display').innerHTML = d.price + (plan !== 'enterprise' ? '<span>/month</span>' : '');
-    document.getElementById('m-plan-quota-display').textContent = d.quota;
-  }
-
-  function openModal(plan = 'professional') {
-    const modal = document.getElementById('sub-modal');
-    modal.style.display = 'flex';
-    document.getElementById('m-plan').value = plan;
-    document.getElementById('m-email').value = '';
-    document.getElementById('m-name') && (document.getElementById('m-name').value = '');
-    updatePlanDisplay();
-    goToStep(1);
-  }
-
-  function closeModal() {
-    document.getElementById('sub-modal').style.display = 'none';
-  }
-
-  function goToStep(n) {
-    [1,2,3,4,5].forEach(i => {
-      const el = document.getElementById('m-step-' + i);
-      if (el) el.style.display = 'none';
-    });
-    const target = document.getElementById('m-step-' + n);
-    if (target) target.style.display = 'block';
-
-    // Update step indicator (only steps 1-3 shown)
-    [1,2,3].forEach(i => {
-      const s = document.getElementById('mstep-' + i);
-      if (s) {
-        s.classList.remove('active','done');
-        if (i < n) s.classList.add('done');
-        else if (i === n) s.classList.add('active');
-      }
-    });
-
-    // Hide step indicator on processing/success steps
-    const stepsEl = document.getElementById('m-steps');
-    if (stepsEl) stepsEl.style.display = (n >= 4) ? 'none' : 'flex';
-
-    // Update modal title
-    const titles = { 1:'Subscribe to InventaAPI', 2:'Choose Payment Method', 3:'Payment Details', 4:'Processing...', 5:'Subscription Activated!' };
-    document.getElementById('m-header-title').textContent = titles[n] || 'Subscribe';
-  }
-
-  function goToStep2() {
-    const email = document.getElementById('m-email').value.trim();
-    const plan = document.getElementById('m-plan').value;
-    if (!email || !email.includes('@')) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-    // Free plan skips payment
-    if (plan === 'starter') {
-      submitSubscription();
-      return;
-    }
-    // Enterprise shows contact instead of payment
-    if (plan === 'enterprise') {
-      processPayment();
-      return;
-    }
-    document.getElementById('m-pay-plan-label').textContent = planData[plan].name;
-    goToStep(2);
-  }
-
-  function selectPayMethod(method) {
-    currentPayMethod = method;
-    ['gcash','maya','card','bank'].forEach(m => {
-      document.getElementById('pm-' + m).classList.toggle('active', m === method);
-      document.getElementById('check-' + m).textContent = m === method ? '✓' : '';
-    });
-  }
-
-  function goToStep3() {
-    const plan = document.getElementById('m-plan').value;
-    const amt = planData[plan].priceFull;
-
-    // Show correct detail panel
-    document.getElementById('pay-detail-ewallet').style.display = 'none';
-    document.getElementById('pay-detail-card').style.display = 'none';
-    document.getElementById('pay-detail-bank').style.display = 'none';
-
-    if (currentPayMethod === 'gcash' || currentPayMethod === 'maya') {
-      document.getElementById('pay-detail-ewallet').style.display = 'block';
-      const isGcash = currentPayMethod === 'gcash';
-      document.getElementById('pay-qr-label').textContent = isGcash ? 'Scan with GCash app' : 'Scan with Maya app';
-      if (document.getElementById('ewallet-amount')) document.getElementById('ewallet-amount').textContent = amt;
-    } else if (currentPayMethod === 'card') {
-      document.getElementById('pay-detail-card').style.display = 'block';
-    } else {
-      document.getElementById('pay-detail-bank').style.display = 'block';
-      if (document.getElementById('bank-amount')) document.getElementById('bank-amount').textContent = amt;
-    }
-    goToStep(3);
-  }
-
-  function formatCardNum(el) {
-    let val = el.value.replace(/\D/g, '').slice(0, 16);
-    el.value = val.replace(/(\d{4})/g, '$1 ').trim();
-    const disp = el.value || '•••• •••• •••• ••••';
-    document.getElementById('card-preview-num').textContent = disp.length >= 19 ? disp : '•••• •••• •••• ••••';
-  }
-
-  function formatCardExp(el) {
-    let val = el.value.replace(/\D/g, '');
-    if (val.length >= 2) val = val.slice(0,2) + ' / ' + val.slice(2,4);
-    el.value = val;
-    document.getElementById('card-preview-exp').textContent = el.value || 'MM/YY';
-  }
-
-  async function processPayment() {
-    goToStep(4);
-    // Simulate payment verification delay
-    await new Promise(r => setTimeout(r, 2200));
-    await submitSubscription();
-  }
-
-  async function submitSubscription() {
-    const email = document.getElementById('m-email').value.trim();
-    const plan = document.getElementById('m-plan').value;
-    const segment = document.getElementById('m-segment').value;
-    
-    try {
-      const res = await fetch(window.location.origin + '/daas/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, plan, businessType: segment })
-      });
-      const data = await res.json();
-      if (res.ok && data.apiKey) {
-        document.getElementById('m-api-key').value = data.apiKey;
-        const pd = planData[plan];
-        document.getElementById('m-key-plan-badge').textContent = pd.name + ' Plan · ' + pd.quota;
-        goToStep(5);
-      } else {
-        goToStep(1);
-        alert('Subscription failed: ' + (data.error || 'Unknown error'));
-      }
-    } catch(e) {
+    function openModal(plan = 'professional') {
+      document.getElementById('sub-modal').style.display = 'flex';
+      document.getElementById('m-plan-select').value = plan;
+      document.getElementById('m-email').value = '';
+      updatePlanDisplay();
       goToStep(1);
-      alert('Request failed: ' + e.message);
     }
-  }
 
-  function copyModalKey() {
-    const input = document.getElementById('m-api-key');
-    input.select();
-    navigator.clipboard.writeText(input.value).then(() => {
+    function closeModal() {
+      document.getElementById('sub-modal').style.display = 'none';
+    }
+
+    function goToDashboard() {
+      const apiKey = document.getElementById('m-api-key').value;
+      // Close the modal
+      closeModal();
+      // Redirect to the Next.js dashboard running on port 3000 (with the generated API key)
+      window.location.href = 'http://localhost:3000/dashboard?key=' + encodeURIComponent(apiKey);
+    }
+
+    function updatePlanDisplay() {
+      const plan = document.getElementById('m-plan-select').value;
+      const d = planData[plan];
+      document.getElementById('m-plan-name').textContent = d.name + ' Plan';
+      document.getElementById('m-plan-price').innerHTML = d.price + (d.period ? `<span>${d.period}</span>` : '');
+      document.getElementById('m-plan-quota').textContent = d.quota;
+    }
+
+    function goToStep(n) {
+      [1, 2, 3, 4, 5].forEach(i => {
+        const el = document.getElementById('mstep-body-' + i);
+        if (el) el.style.display = 'none';
+      });
+      const t = document.getElementById('mstep-body-' + n);
+      if (t) t.style.display = 'block';
+
+      // Step indicator
+      [1, 2, 3].forEach(i => {
+        const s = document.getElementById('mstep-' + i);
+        const l = document.getElementById('mline-' + i);
+        if (s) { s.classList.remove('active', 'done'); if (i < n) s.classList.add('done'); else if (i === n) s.classList.add('active'); }
+        if (l) { l.classList.toggle('done', i < n); }
+      });
+
+      // Hide bar on processing/success
+      const bar = document.getElementById('m-steps-bar');
+      if (bar) bar.style.display = n >= 4 ? 'none' : 'flex';
+
+      const titles = { 1: 'Subscribe to InventaAPI', 2: 'Choose Payment Method', 3: 'Payment Details', 4: 'Processing...', 5: 'Subscription Activated!' };
+      document.getElementById('m-head-title').textContent = titles[n] || 'Subscribe';
+    }
+
+    function goToStep2() {
+      const email = document.getElementById('m-email').value.trim();
+      if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+      const plan = document.getElementById('m-plan-select').value;
+      if (plan === 'starter') { submitSubscription(); return; }
+      if (plan === 'enterprise') { processPayment(); return; }
+      document.getElementById('m-pay-plan-label').textContent = planData[plan].name;
+      goToStep(2);
+    }
+
+    function selectPay(method) {
+      currentPay = method;
+      ['gcash', 'maya', 'card', 'bank'].forEach(m => {
+        document.getElementById('pm-' + m).classList.toggle('selected', m === method);
+        document.getElementById('pcheck-' + m).textContent = m === method ? '✓' : '';
+      });
+    }
+
+    function goToStep3() {
+      const plan = document.getElementById('m-plan-select').value;
+      const amt = planData[plan].priceFull;
+      ['ewallet', 'card', 'bank'].forEach(x => {
+        const el = document.getElementById('pd-' + x);
+        if (el) el.style.display = 'none';
+      });
+      if (currentPay === 'gcash' || currentPay === 'maya') {
+        document.getElementById('pd-ewallet').style.display = 'block';
+        document.getElementById('qr-app-label').textContent = `Scan with ${currentPay === 'gcash' ? 'GCash' : 'Maya'} app · or send to this number`;
+        document.getElementById('ewallet-amount').textContent = amt;
+      } else if (currentPay === 'card') {
+        document.getElementById('pd-card').style.display = 'block';
+      } else {
+        document.getElementById('pd-bank').style.display = 'block';
+        document.getElementById('bank-amount').textContent = amt;
+      }
+      goToStep(3);
+    }
+
+    function fmtCardNum(el) {
+      let v = el.value.replace(/\D/g, '').slice(0, 16);
+      el.value = v.replace(/(\d{4})/g, '$1 ').trim();
+      const d = document.getElementById('cnum-disp');
+      d.textContent = el.value.length >= 19 ? el.value : '•••• •••• •••• ••••';
+    }
+
+    function fmtCardExp(el) {
+      let v = el.value.replace(/\D/g, '');
+      if (v.length >= 2) v = v.slice(0, 2) + '/' + v.slice(2, 4);
+      el.value = v;
+      document.getElementById('cexp-disp').textContent = el.value || 'MM/YY';
+    }
+
+    async function processPayment() {
+      goToStep(4);
+      await new Promise(r => setTimeout(r, 2200));
+      await submitSubscription();
+    }
+
+    async function submitSubscription() {
+      const email = document.getElementById('m-email').value.trim();
+      const plan = document.getElementById('m-plan-select').value;
+      const segment = document.getElementById('m-segment').value;
+      try {
+        const res = await fetch(window.location.origin + '/daas/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, plan, businessType: segment })
+        });
+        const data = await res.json();
+        if (res.ok && data.apiKey) {
+          document.getElementById('m-api-key').value = data.apiKey;
+          const pd = planData[plan];
+          document.getElementById('m-plan-badge').textContent = pd.name + ' Plan · ' + pd.quota;
+          goToStep(5);
+        } else {
+          goToStep(1);
+          alert('Subscription failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (e) {
+        goToStep(1);
+        alert('Request failed: ' + e.message);
+      }
+    }
+
+    function copyKey() {
+      const input = document.getElementById('m-api-key');
+      input.select();
+      navigator.clipboard.writeText(input.value).catch(() => document.execCommand('copy'));
       const btn = document.getElementById('m-copy-btn');
       btn.textContent = '✓ Copied!';
-      setTimeout(() => { btn.textContent = '📋 Copy API Key'; }, 2000);
-    }).catch(() => {
-      document.execCommand('copy');
-      const btn = document.getElementById('m-copy-btn');
-      btn.textContent = '✓ Copied!';
-      setTimeout(() => { btn.textContent = '📋 Copy API Key'; }, 2000);
-    });
-  }
+      setTimeout(() => btn.textContent = '📋 Copy API Key', 2000);
+    }
 
-  function testKeyInConsole() {
-    const key = document.getElementById('m-api-key').value;
-    const segment = document.getElementById('m-segment').value;
-    document.getElementById('t-api-key').value = key;
-    document.getElementById('t-preset').value = 'daas-catalog';
-    loadPreset();
-    document.getElementById('t-url').value = window.location.origin + `/daas/catalog?businessType=${segment}`;
-    closeModal();
-    document.getElementById('live-test').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => { runTest(); }, 800);
-  }
 
-  // Scroll reveal
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Initialize preset url on load
-  document.addEventListener('DOMContentLoaded', () => {
-    loadPreset();
-  });
-</script>
+    // ── Scroll reveal ──────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Init ───────────────────────────────────────────────
+
+  </script>
 </body>
+
 </html>
