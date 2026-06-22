@@ -2,35 +2,45 @@
 
 import { useState, useEffect } from "react";
 import { Search, Filter, Package, ChevronDown, Download, Image as ImageIcon, ScanBarcode } from "lucide-react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
+import { useAuth } from "@/lib/firebase/auth-context";
 
 export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { appUser } = useAuth();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const q = query(collection(db, "products"), orderBy("product_name"));
-        const snapshot = await getDocs(q);
-        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products from Firestore:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!appUser) return;
+    setLoading(true);
 
-    fetchProducts();
-  }, []);
+    let q;
+    if (appUser.role === "Admin") {
+      q = query(collection(db, "products"));
+    } else {
+      q = query(collection(db, "products"), where("businessType", "==", appUser.businessSegment));
+    }
 
-  const filteredProducts = products.filter(p => 
-    p.product_name?.toLowerCase().includes(search.toLowerCase()) || 
-    p.barcode?.includes(search) || 
-    p.category?.toLowerCase().includes(search.toLowerCase())
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      let data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      // Client side sort since we might not have a composite index for businessType + name
+      data.sort((a: any, b: any) => (a.name || "").localeCompare(b.name || ""));
+      setProducts(data);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching products from Firestore:", error);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [appUser]);
+
+  const filteredProducts = products.filter(p =>
+    (p.name?.toLowerCase() || "").includes(search.toLowerCase()) ||
+    (p.barcode || "").includes(search) ||
+    (p.category?.toLowerCase() || "").includes(search.toLowerCase())
   );
 
   return (
@@ -60,9 +70,9 @@ export default function ProductsPage() {
         <div className="p-4 border-b border-slate-800/60 flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input 
-              type="text" 
-              placeholder="Search by name, category, or Barcode..." 
+            <input
+              type="text"
+              placeholder="Search by name, category, or Barcode..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-slate-600"
@@ -85,8 +95,8 @@ export default function ProductsPage() {
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Product</th>
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Barcode</th>
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Category</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Variation / Size</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Supplier</th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Price (₱)</th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Stock</th>
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-center">Action</th>
               </tr>
             </thead>
@@ -113,34 +123,35 @@ export default function ProductsPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
                           {product.image_url ? (
-                            <img src={product.image_url} alt={product.product_name} className="w-full h-full object-cover rounded" />
+                            <img src={product.image_url} alt={product.name} className="w-full h-full object-cover rounded" />
                           ) : (
                             <ImageIcon className="w-5 h-5 text-slate-500" />
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-slate-200">{product.product_name}</p>
-                          <p className="text-xs text-slate-500 truncate max-w-xs">{product.description || "No description"}</p>
+                          <p className="text-sm font-medium text-slate-200">{product.name || product.product_name}</p>
+                          <p className="text-xs text-slate-500 truncate max-w-xs">{product.businessType || "Unknown Segment"}</p>
                         </div>
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="text-sm font-mono text-slate-300 bg-slate-900 px-2 py-1 rounded border border-slate-800">{product.barcode}</span>
+                      <span className="text-sm font-mono text-slate-300 bg-slate-900 px-2 py-1 rounded border border-slate-800">{product.barcode || "-"}</span>
                     </td>
                     <td className="p-4">
                       <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                        {product.category}
+                        {product.category || "General"}
                       </span>
                     </td>
                     <td className="p-4">
-                      <div className="text-sm text-slate-200">{product.variation || "-"}</div>
-                      <div className="text-xs text-slate-500">{product.size || "-"}</div>
+                      <div className="text-sm font-medium text-emerald-400">₱{product.price?.toFixed(2) || "0.00"}</div>
                     </td>
                     <td className="p-4">
-                      <span className="text-sm text-slate-300">{product.supplier || "Unknown"}</span>
+                      <span className={`text-sm font-medium px-2 py-1 rounded border ${product.stock > 10 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
+                        {product.stock || 0}
+                      </span>
                     </td>
                     <td className="p-4 text-center">
-                      <button className="text-xs font-medium text-blue-400 hover:text-blue-300 hover:underline">View JSON</button>
+                      <button className="text-xs font-medium text-blue-400 hover:text-blue-300 hover:underline">Edit</button>
                     </td>
                   </tr>
                 ))

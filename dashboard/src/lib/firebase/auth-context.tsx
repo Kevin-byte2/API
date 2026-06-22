@@ -11,6 +11,7 @@ interface AppUser {
   email: string;
   fullName: string;
   businessName: string;
+  businessSegment: string;
   role: string;
   plan: string;
 }
